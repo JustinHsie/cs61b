@@ -15,8 +15,10 @@ public class Body {
 	public double dx;
 	public double dy;
 	public double r;
-	public double netForce;
+	public double Force;
 	public static final double constG = 6.67e-11;
+	public double xxForce;
+	public double yyForce;
 
 	/** Constructor instantiate class */
 	public Body(double xP, double yP, double xV,
@@ -42,8 +44,8 @@ public class Body {
 	/** Method to calculate distance between 
 	this body and given body */
 	public double calcDistance(Body b) {
-		dx = this.xxPos - b.xxPos;
-		dy = this.yyPos - b.yyPos;
+		dx = b.xxPos - this.xxPos;
+		dy = b.yyPos - this.yyPos;
 		r = Math.sqrt(dx * dx + dy * dy);
 		return r;
 	}
@@ -51,10 +53,25 @@ public class Body {
 	/** Method to calculate force exerted on 
 	this body by given body */
 	public double calcForceExertedBy(Body b) {
-		netForce = (constG * this.mass * b.mass) / 
+		Force = (constG * this.mass * b.mass) / 
 					(calcDistance(b) * calcDistance(b));
-		return netForce;
+		return Force;
 	}
+
+	/** Method to calculate force exerted in x direction */
+	public double calcForceExertedByX(Body b) {
+		xxForce = (calcForceExertedBy(b) * this.dx) / 
+					calcDistance(b);
+		return xxForce;
+	}
+
+	/** Method to calculate force exerted in y direction */
+	public double calcForceExertedByY(Body b) {
+		yyForce = (calcForceExertedBy(b) * this.dy) / 
+					calcDistance(b);
+		return yyForce;
+	}
+
 }
 
 
