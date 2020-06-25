@@ -19,6 +19,9 @@ public class Body {
 	public static final double constG = 6.67e-11;
 	public double xxForce;
 	public double yyForce;
+	public Body[] allBodys;
+	public double netForceX;
+	public double netForceY;
 
 	/** Constructor instantiate class */
 	public Body(double xP, double yP, double xV,
@@ -71,6 +74,37 @@ public class Body {
 					calcDistance(b);
 		return yyForce;
 	}
+
+	/** Method to calculate net force in x by all bodies */
+	public double calcNetForceExertedByX(Body[] allBodys) {
+		this.allBodys = allBodys;
+		netForceX = 0;
+		for (Body b : allBodys) {
+			if (b.equals(this)) {
+				continue;
+			}
+			else {
+				netForceX = netForceX + calcForceExertedByX(b);
+			}
+		}
+		return netForceX;
+	}
+
+	/** Method to calculate net force in y by all bodies */
+	public double calcNetForceExertedByY(Body[] allBodys) {
+		this.allBodys = allBodys;
+		netForceY = 0;
+		for (Body b : allBodys) {
+			if (b.equals(this)) {
+				continue;
+			}
+			else {
+				netForceY = netForceY + calcForceExertedByY(b);
+			}
+		}
+		return netForceY;
+	}
+
 
 }
 
