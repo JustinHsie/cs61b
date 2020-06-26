@@ -51,9 +51,9 @@ public class Body {
 	/** Method to calculate force exerted on 
 	this body by given body */
 	public double calcForceExertedBy(Body b) {
-		double Force = (constG * this.mass * b.mass) / 
+		double force = (constG * this.mass * b.mass) / 
 					(calcDistance(b) * calcDistance(b));
-		return Force;
+		return force;
 	}
 
 	/** Method to calculate force exerted in x direction */
@@ -100,14 +100,17 @@ public class Body {
 		return netForceY;
 	}
 
-	/** Method to update position of body 
+	/** Method to update position of body */
 	public void update(double dt, double fX, double fY) {
-		public double xxAccel = fX / mass;
-		public double yyAccel = fY / mass; 
+		double xxAccel = fX / mass;
+		double yyAccel = fY / mass; 
 
+		xxVel = xxVel + dt * xxAccel;
+		yyVel = yyVel + dt * yyAccel;
 
-
-	} */
+		xxPos = xxPos + dt * xxVel;
+		yyPos = yyPos + dt * yyVel;
+	}
 
 }
 
