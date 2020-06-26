@@ -2,8 +2,8 @@
 import java.lang.Math;
 
 /** Class that determines properties of the planet body
-* @author Justin Hsie
-*/
+ * @author Justin Hsie
+ */
 
 public class Body {
 	public double xxPos;
@@ -18,7 +18,15 @@ public class Body {
 	public static final double constG = 6.67e-11;
 	public Body[] allBodys;
 
-	/** Constructor instantiate class */
+	/** Constructor instantiate class 
+	 *
+	 *  @param  xP   x Position
+	 *  @param  yP   y Position
+	 *  @param  xV   x Velocity
+	 *  @param  yV   y Velocity
+	 *  @param  m    Mass
+	 *  @param  img  Image file
+	 */
 	public Body(double xP, double yP, double xV,
               	double yV, double m, String img) {
 		xxPos = xP;
@@ -110,6 +118,11 @@ public class Body {
 
 		xxPos = xxPos + dt * xxVel;
 		yyPos = yyPos + dt * yyVel;
+	}
+
+	/** Method to draw */
+	public void draw(){
+		StdDraw.picture(xxPos, yyPos, "images/" + imgFileName);
 	}
 
 }

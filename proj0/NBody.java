@@ -35,13 +35,34 @@ public class NBody {
 		return bodies;
 	}
 
+
 	/** Main */
 	public static void main(String[] args) {
 		double T = Double.parseDouble(args[0]);
 		double dt = Double.parseDouble(args[1]);
 		String filename = args[2];
 
-		readRadius(filename);
-		readBodies(filename);
+		double radius = readRadius(filename);
+		Body[] bodies = readBodies(filename);
+
+		StdDraw.enableDoubleBuffering();
+		StdDraw.setScale(-radius, radius);
+		StdDraw.picture(0, 0, "images/starfield.jpg");
+		for (Body b : bodies) {
+			b.draw();
+		}
+		StdDraw.show();
+
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
