@@ -15,13 +15,8 @@ public class Body {
 	public double dx;
 	public double dy;
 	public double r;
-	public double Force;
 	public static final double constG = 6.67e-11;
-	public double xxForce;
-	public double yyForce;
 	public Body[] allBodys;
-	public double netForceX;
-	public double netForceY;
 
 	/** Constructor instantiate class */
 	public Body(double xP, double yP, double xV,
@@ -56,21 +51,21 @@ public class Body {
 	/** Method to calculate force exerted on 
 	this body by given body */
 	public double calcForceExertedBy(Body b) {
-		Force = (constG * this.mass * b.mass) / 
+		double Force = (constG * this.mass * b.mass) / 
 					(calcDistance(b) * calcDistance(b));
 		return Force;
 	}
 
 	/** Method to calculate force exerted in x direction */
 	public double calcForceExertedByX(Body b) {
-		xxForce = (calcForceExertedBy(b) * this.dx) / 
+		double xxForce = (calcForceExertedBy(b) * this.dx) / 
 					calcDistance(b);
 		return xxForce;
 	}
 
 	/** Method to calculate force exerted in y direction */
 	public double calcForceExertedByY(Body b) {
-		yyForce = (calcForceExertedBy(b) * this.dy) / 
+		double yyForce = (calcForceExertedBy(b) * this.dy) / 
 					calcDistance(b);
 		return yyForce;
 	}
@@ -78,7 +73,7 @@ public class Body {
 	/** Method to calculate net force in x by all bodies */
 	public double calcNetForceExertedByX(Body[] allBodys) {
 		this.allBodys = allBodys;
-		netForceX = 0;
+		double netForceX = 0;
 		for (Body b : allBodys) {
 			if (b.equals(this)) {
 				continue;
@@ -93,7 +88,7 @@ public class Body {
 	/** Method to calculate net force in y by all bodies */
 	public double calcNetForceExertedByY(Body[] allBodys) {
 		this.allBodys = allBodys;
-		netForceY = 0;
+		double netForceY = 0;
 		for (Body b : allBodys) {
 			if (b.equals(this)) {
 				continue;
@@ -105,6 +100,14 @@ public class Body {
 		return netForceY;
 	}
 
+	/** Method to update position of body 
+	public void update(double dt, double fX, double fY) {
+		public double xxAccel = fX / mass;
+		public double yyAccel = fY / mass; 
+
+
+
+	} */
 
 }
 
