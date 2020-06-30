@@ -47,14 +47,14 @@ public class LinkedListDequeTest {
 		passed = checkSize(1, lld1.size()) && passed;
 		passed = checkEmpty(false, lld1.isEmpty()) && passed;
 
-		lld1.addFirst("middle");
+		lld1.addLast("middle");
 		passed = checkSize(2, lld1.size()) && passed;
 
 		lld1.addLast("back");
 		passed = checkSize(3, lld1.size()) && passed;
 
 		System.out.println(lld1.get(1));
-		//System.out.println(lld1.getRecursive(1));
+		System.out.println(lld1.getRecursive(2));
 
 		System.out.println("Printing out deque: ");
 		lld1.printDeque();

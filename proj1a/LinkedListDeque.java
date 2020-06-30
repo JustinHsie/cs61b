@@ -105,15 +105,20 @@ public class LinkedListDeque<Spiff> {
         }
     }
     */
-
-    /*
-    public Spiff getRecursive(int index) {
-        if(index == 0) {
-            return ;
+    public Spiff recursive(int index, StuffNode current) {
+        current = current.next;
+        if (current == sentinel) {
+            return null;
         }
-        return getRecursive(index - 1);
+        if (index == 0) {
+            return current.item;
+        }
+        return recursive(index - 1, current);
+    }
+    public Spiff getRecursive(int index) {
+        current = sentinel;
+        return recursive(index, current);
     }
 
-     */
 
 }
