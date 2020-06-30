@@ -47,11 +47,14 @@ public class LinkedListDequeTest {
 		passed = checkSize(1, lld1.size()) && passed;
 		passed = checkEmpty(false, lld1.isEmpty()) && passed;
 
-		lld1.addLast("middle");
+		lld1.addFirst("middle");
 		passed = checkSize(2, lld1.size()) && passed;
 
 		lld1.addLast("back");
 		passed = checkSize(3, lld1.size()) && passed;
+
+		System.out.println(lld1.get(1));
+		//System.out.println(lld1.getRecursive(1));
 
 		System.out.println("Printing out deque: ");
 		lld1.printDeque();
@@ -69,7 +72,7 @@ public class LinkedListDequeTest {
 		// should be empty 
 		boolean passed = checkEmpty(true, lld1.isEmpty());
 
-		lld1.addFirst(10);
+		lld1.addLast(10);
 		// should not be empty 
 		passed = checkEmpty(false, lld1.isEmpty()) && passed;
 
