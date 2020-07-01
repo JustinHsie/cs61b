@@ -95,16 +95,21 @@ public class LinkedListDeque<Spiff> {
         return ptr.item;
     }
 
-    /*
+    /**
+     * @source Josh Hug walkthrough vid
+     */
     public LinkedListDeque(LinkedListDeque other) {
-        LinkedListDeque copy = new LinkedListDeque();
-        StuffNode ptr = other.sentinel.next;
-        while(ptr != sentinel) {
-            copy.sentinel.next = new StuffNode(ptr.item, ptr.prev, ptr.next);
-            ptr = ptr.next;
+        sentinel = new StuffNode(null, null, null);
+        sentinel.prev = sentinel;
+        sentinel.next = sentinel;
+        current = sentinel;
+        size = 0;
+
+        for (int i = 0; i < other.size(); i += 1) {
+            addLast((Spiff) other.get(i));
         }
     }
-    */
+
     public Spiff recursive(int index, StuffNode current) {
         current = current.next;
         if (current == sentinel) {
