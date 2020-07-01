@@ -7,9 +7,19 @@ public class ArrayDeque<Item> {
     // Construct empty array size 8
     public ArrayDeque() {
         items = (Item []) new Object[8];
-        nextFirst = 0;
-        nextLast = 1;
+        nextFirst = 4;
+        nextLast = 5;
         size = 0;
+    }
+
+    public int minusOne(int index) {
+        if (index == nextLast) {
+            //resize();
+        }
+        else if (index - 1 < 0) {
+            return items.length - 1;
+        }
+        return index - 1;
     }
 
     public ArrayDeque(ArrayDeque other) {
@@ -17,7 +27,9 @@ public class ArrayDeque<Item> {
     }
 
     public void addFirst(Item item) {
-
+        items[nextFirst] = item;
+        size += 1;
+        minusOne(nextFirst);
     }
 
     public void addLast(Item item) {
@@ -29,11 +41,14 @@ public class ArrayDeque<Item> {
     }
 
     public int size() {
-        return 0;
+        return size;
     }
 
     public void printDeque() {
-
+        for(int i = 0, n = items.length; i < n; i += 1) {
+            System.out.print(items[i] + " ");
+        }
+        System.out.println();
     }
 
     public Item removeFirst() {
@@ -45,6 +60,6 @@ public class ArrayDeque<Item> {
     }
 
     public Item get(int index) {
-        return null;
+        return items[index];
     }
 }
