@@ -12,31 +12,49 @@ public class ArrayDeque<Item> {
         size = 0;
     }
 
+    public ArrayDeque(ArrayDeque other) {
+
+    }
+
     public int minusOne(int index) {
-        if (index == nextLast) {
-            //resize();
-        }
-        else if (index - 1 < 0) {
+        if (index == 0) {
             return items.length - 1;
         }
         return index - 1;
     }
 
-    public ArrayDeque(ArrayDeque other) {
+    public int plusOne(int index) {
+        if (index == items.length - 1) {
+            return 0;
+        }
+        return index + 1;
+    }
 
+    public void checkFull() {
+        if (nextLast - nextFirst == 1) {
+            System.out.println("full");
+            //resize
+        }
     }
 
     public void addFirst(Item item) {
         items[nextFirst] = item;
+        nextFirst = minusOne(nextFirst);
+        checkFull();
         size += 1;
-        minusOne(nextFirst);
     }
 
     public void addLast(Item item) {
-
+        items[nextLast] = item;
+        nextLast = plusOne(nextLast);
+        checkFull();
+        size += 1;
     }
 
     public boolean isEmpty() {
+        if (size == 0) {
+            return true;
+        }
         return false;
     }
 
