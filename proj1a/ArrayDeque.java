@@ -6,14 +6,21 @@ public class ArrayDeque<Item> {
 
     // Construct empty array size 8
     public ArrayDeque() {
-        items = (Item []) new Object[3];
+        items = (Item []) new Object[8];
         nextFirst = 0;
         nextLast = 1;
         size = 0;
     }
 
     public ArrayDeque(ArrayDeque other) {
+        items = (Item []) new Object[other.items.length];
+        nextFirst = 0;
+        nextLast = 1;
+        size = 0;
 
+        for (int i = 0; i < other.items.length; i += 1) {
+            items[i] = (Item) other.get(i);
+        }
     }
 
     public int minusOne(int index) {

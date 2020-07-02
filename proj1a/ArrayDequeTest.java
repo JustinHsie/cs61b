@@ -16,6 +16,9 @@ public class ArrayDequeTest {
         ad1.removeLast();
         ad1.printDeque();
 
+        ArrayDeque<Integer> ad2 = new ArrayDeque<>(ad1);
+        ad2.printDeque();
+
 
 
     }
