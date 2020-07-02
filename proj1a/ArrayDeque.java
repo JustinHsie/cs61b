@@ -3,13 +3,15 @@ public class ArrayDeque<Item> {
     private int nextFirst;
     private int nextLast;
     private int size;
+    private int begin;
 
     // Construct empty array size 8
     public ArrayDeque() {
-        items = (Item []) new Object[8];
+        items = (Item []) new Object[3];
         nextFirst = 0;
         nextLast = 1;
         size = 0;
+        begin = 0;
     }
 
     public ArrayDeque(ArrayDeque other) {
@@ -17,7 +19,7 @@ public class ArrayDeque<Item> {
     }
 
     public int minusOne(int index) {
-        if (index == 0) {
+        if (index == begin) {
             return items.length - 1;
         }
         return index - 1;
@@ -25,30 +27,40 @@ public class ArrayDeque<Item> {
 
     public int plusOne(int index) {
         if (index == items.length - 1) {
-            return 0;
+            return begin;
         }
         return index + 1;
     }
 
+    private void resize(int capacity) {
+        Item[] array = (Item[]) new Object[capacity];
+        System.arraycopy(items, 0, array, 0, size);
+        items = array;
+        begin = size;
+        nextFirst = size;
+        nextLast = size + 1;
+    }
+
     public void checkFull() {
-        if (nextLast - nextFirst == 1) {
+        if (minusOne(nextLast) == nextFirst ||
+                plusOne(nextFirst) == nextLast) {
             System.out.println("full");
-            //resize
+            resize(size * 2);
         }
     }
 
     public void addFirst(Item item) {
         items[nextFirst] = item;
         nextFirst = minusOne(nextFirst);
-        checkFull();
         size += 1;
+        checkFull();
     }
 
     public void addLast(Item item) {
         items[nextLast] = item;
         nextLast = plusOne(nextLast);
-        checkFull();
         size += 1;
+        checkFull();
     }
 
     public boolean isEmpty() {
