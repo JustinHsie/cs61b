@@ -3,7 +3,6 @@ public class ArrayDeque<Item> {
     private int nextFirst;
     private int nextLast;
     private int size;
-    private int begin;
 
     // Construct empty array size 8
     public ArrayDeque() {
@@ -11,7 +10,6 @@ public class ArrayDeque<Item> {
         nextFirst = 0;
         nextLast = 1;
         size = 0;
-        begin = 0;
     }
 
     public ArrayDeque(ArrayDeque other) {
@@ -19,7 +17,7 @@ public class ArrayDeque<Item> {
     }
 
     public int minusOne(int index) {
-        if (index == begin) {
+        if (index == 0) {
             return items.length - 1;
         }
         return index - 1;
@@ -27,7 +25,7 @@ public class ArrayDeque<Item> {
 
     public int plusOne(int index) {
         if (index == items.length - 1) {
-            return begin;
+            return 0;
         }
         return index + 1;
     }
@@ -36,9 +34,8 @@ public class ArrayDeque<Item> {
         Item[] array = (Item[]) new Object[capacity];
         System.arraycopy(items, 0, array, 0, size);
         items = array;
-        begin = size;
-        nextFirst = size;
-        nextLast = size + 1;
+        nextFirst = items.length - 1;
+        nextLast = size;
     }
 
     public void checkFull() {
@@ -81,12 +78,27 @@ public class ArrayDeque<Item> {
         System.out.println();
     }
 
+    private void shrink() {
+        Item[] array = (Item []) new Object[items.length / 2];
+        System.arraycopy(items, nextFirst + 1, array, 0, size);
+        items = array;
+        nextFirst = items.length - 1;
+        nextLast = size;
+    }
+
+    private void usageRatio() {
+        if ((float) size / (float) items.length < 0.25) {
+            shrink();
+        }
+    }
+
     public Item removeFirst() {
         nextFirst = plusOne(nextFirst);
         Item item = items[nextFirst];
         if (item != null) {
             items[nextFirst] = null;
             size -= 1;
+            usageRatio();
             return item;
         }
         return null;
@@ -98,6 +110,7 @@ public class ArrayDeque<Item> {
         if (item != null) {
             items[nextLast] = null;
             size -= 1;
+            usageRatio();
             return item;
         }
         return null;
