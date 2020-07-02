@@ -7,8 +7,8 @@ public class ArrayDeque<Item> {
     // Construct empty array size 8
     public ArrayDeque() {
         items = (Item []) new Object[8];
-        nextFirst = 4;
-        nextLast = 5;
+        nextFirst = 0;
+        nextLast = 1;
         size = 0;
     }
 
@@ -70,10 +70,24 @@ public class ArrayDeque<Item> {
     }
 
     public Item removeFirst() {
+        nextFirst = plusOne(nextFirst);
+        Item item = items[nextFirst];
+        if (item != null) {
+            items[nextFirst] = null;
+            size -= 1;
+            return item;
+        }
         return null;
     }
 
     public Item removeLast() {
+        nextLast = minusOne(nextLast);
+        Item item = items[nextLast];
+        if (item != null) {
+            items[nextLast] = null;
+            size -= 1;
+            return item;
+        }
         return null;
     }
 
