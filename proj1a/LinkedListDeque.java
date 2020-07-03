@@ -57,7 +57,7 @@ public class LinkedListDeque<Spiff> {
 
     public void printDeque() {
         StuffNode ptr = sentinel.next;
-        while(ptr != sentinel) {
+        while (ptr != sentinel) {
             System.out.print(ptr.item + " ");
             ptr = ptr.next;
         }
@@ -89,7 +89,7 @@ public class LinkedListDeque<Spiff> {
 
     public Spiff get(int index) {
         StuffNode ptr = sentinel.next;
-        for(int i = 0; i < index; i += 1) {
+        for (int i = 0; i < index; i += 1) {
             ptr = ptr.next;
         }
         return ptr.item;
@@ -110,13 +110,13 @@ public class LinkedListDeque<Spiff> {
         }
     }
 
-    public Spiff recursive(int index, StuffNode current) {
-        current = current.next;
-        if (current == sentinel) {
+    public Spiff recursive(int index, StuffNode pointer) {
+        pointer = pointer.next;
+        if (pointer == sentinel) {
             return null;
         }
         if (index == 0) {
-            return current.item;
+            return pointer.item;
         }
         return recursive(index - 1, current);
     }

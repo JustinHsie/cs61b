@@ -46,8 +46,8 @@ public class ArrayDeque<Item> {
     }
 
     public void checkFull() {
-        if (minusOne(nextLast) == nextFirst ||
-                plusOne(nextFirst) == nextLast) {
+        if (minusOne(nextLast) == nextFirst
+                || plusOne(nextFirst) == nextLast) {
             System.out.println("full");
             resize(size * 2);
         }
@@ -79,7 +79,7 @@ public class ArrayDeque<Item> {
     }
 
     public void printDeque() {
-        for(int i = 0, n = items.length; i < n; i += 1) {
+        for (int i = 0, n = items.length; i < n; i += 1) {
             System.out.print(items[i] + " ");
         }
         System.out.println();
