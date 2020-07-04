@@ -123,19 +123,74 @@ public class IntList {
          */
     }
 
+    /**
+     * Returns the reverse of the given IntList.
+     * This method is destructive. If given null
+     * as an input, returns null.
+     */
 
+    /* Changes head, so need to reassign caller
 
+    private IntList reverseRecursive() {
+        IntList next = this.rest;
+        if (next.rest == null) {
+            next.rest = this;
+            return next;
+        }
+        IntList head = next.reverseRecursive();
+        next.rest = this;
+        return head;
+    }
 
+    public static IntList reverse(IntList A) {
+        if (A != null) {
+            IntList temp = A;
+            A = A.reverseRecursive();
+            temp.rest = null;
+            return A;
+        }
+        return null;
+    }
 
+     */
 
+    private static int findEnd(IntList A) {
+        if (A.rest == null) {
+            return 1;
+        }
+        return 1 + findEnd(A.rest);
+    }
 
+    private static void swap(IntList a, IntList b) {
+        int temp;
+        temp = a.first;
+        a.first = b.first;
+        b.first = temp;
+    }
 
+    private static void rptSwap(IntList A, int rpt) {
+        for (int i = 0; i < rpt; i += 1) {
+            swap(A, A.rest);
+            A = A.rest;
+        }
+    }
 
+    private static void reverse(IntList A, int swaps) {
+        if (swaps == 0) {
+            return;
+        }
+        rptSwap(A, swaps);
+        reverse(A, swaps - 1);
+    }
 
-
-
-
-
+    public static IntList reverse(IntList A) {
+        if (A != null) {
+            int end = findEnd(A);
+            reverse(A, end - 1);
+            return A;
+        }
+        return null;
+    }
 
 
     /**
