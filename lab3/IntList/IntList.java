@@ -129,7 +129,7 @@ public class IntList {
      * as an input, returns null.
      */
 
-    /* Changes head, so need to reassign caller
+    /* Changes head, so need to reassign caller. O(n)
 
     private IntList reverseRecursive() {
         IntList next = this.rest;
@@ -154,6 +154,7 @@ public class IntList {
 
      */
 
+    // Switches numbers in list, O(n2)
     private static int findEnd(IntList A) {
         if (A.rest == null) {
             return 1;
