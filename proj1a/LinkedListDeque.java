@@ -65,6 +65,8 @@ public class LinkedListDeque<Spiff> {
     }
 
     public Spiff removeFirst() {
+        current = sentinel;
+        entry = sentinel;
         if (sentinel.next != sentinel) {
             Spiff item = sentinel.next.item;
             sentinel.next = sentinel.next.next;
@@ -77,6 +79,8 @@ public class LinkedListDeque<Spiff> {
 
 
     public Spiff removeLast() {
+        current = sentinel;
+        entry = sentinel;
         if (sentinel.prev != sentinel) {
             Spiff item = sentinel.prev.item;
             sentinel.prev = sentinel.prev.prev;
