@@ -1,4 +1,4 @@
-public class ArrayDeque<Item> implements Deque <Item> {
+public class ArrayDeque<Item> implements Deque<Item> {
     private Item[] items;
     private int nextFirst;
     private int nextLast;

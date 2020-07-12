@@ -1,8 +1,8 @@
-public interface Deque <Item> {
+public interface Deque<Item> {
     public void addFirst(Item item);
     public void addLast(Item item);
     default public boolean isEmpty() {
-        if (size == 0) {
+        if (size() == 0) {
             return true;
         }
         return false;
