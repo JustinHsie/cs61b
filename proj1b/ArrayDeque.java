@@ -132,6 +132,6 @@ public class ArrayDeque<Item> implements Deque<Item> {
 
     @Override
     public Item get(int index) {
-        return items[index];
+        return items[(index + plusOne(nextFirst)) % (size + 1)];
     }
 }
