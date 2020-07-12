@@ -1,4 +1,4 @@
-public class LinkedListDeque<Spiff> implements Deque<Spiff> {
+public class LinkedListDeque<Spiff> {
     private class StuffNode {
         private StuffNode prev;
         private Spiff item;
