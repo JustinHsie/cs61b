@@ -48,7 +48,6 @@ public class ArrayDeque<Item> implements Deque<Item> {
     public void checkFull() {
         if (minusOne(nextLast) == nextFirst
                 || plusOne(nextFirst) == nextLast) {
-            System.out.println("full");
             resize(size * 2);
         }
     }
@@ -92,7 +91,7 @@ public class ArrayDeque<Item> implements Deque<Item> {
 
     private void shrink() {
         Item[] array = (Item []) new Object[items.length / 2];
-        System.arraycopy(items, nextFirst + 1, array, 0, size);
+        System.arraycopy(items, plusOne(nextFirst), array, 0, size);
         items = array;
         nextFirst = items.length - 1;
         nextLast = size;
