@@ -31,6 +31,8 @@ public class LinkedListDeque<Spiff> implements Deque<Spiff> {
         current.next.prev = entry;
         current.next = entry;
     }
+
+    @Override
     public void addFirst(Spiff item) {
         current = sentinel;
         add(item);
@@ -38,12 +40,14 @@ public class LinkedListDeque<Spiff> implements Deque<Spiff> {
 
     }
 
+    @Override
     public void addLast(Spiff item) {
         current = sentinel.prev;
         add(item);
         size += 1;
     }
 
+    @Override
     public boolean isEmpty() {
         if (size == 0) {
             return true;
@@ -51,10 +55,12 @@ public class LinkedListDeque<Spiff> implements Deque<Spiff> {
         return false;
     }
 
+    @Override
     public int size() {
         return size;
     }
 
+    @Override
     public void printDeque() {
         StuffNode ptr = sentinel.next;
         while (ptr != sentinel) {
@@ -64,6 +70,7 @@ public class LinkedListDeque<Spiff> implements Deque<Spiff> {
         System.out.println();
     }
 
+    @Override
     public Spiff removeFirst() {
         current = sentinel;
         entry = sentinel;
@@ -78,6 +85,7 @@ public class LinkedListDeque<Spiff> implements Deque<Spiff> {
     }
 
 
+    @Override
     public Spiff removeLast() {
         current = sentinel;
         entry = sentinel;
@@ -91,6 +99,7 @@ public class LinkedListDeque<Spiff> implements Deque<Spiff> {
         return null;
     }
 
+    @Override
     public Spiff get(int index) {
         StuffNode ptr = sentinel.next;
         for (int i = 0; i < index; i += 1) {
