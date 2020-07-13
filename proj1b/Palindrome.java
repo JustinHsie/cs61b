@@ -2,9 +2,25 @@ import java.util.LinkedList;
 import static org.junit.Assert.*;
 
 public class Palindrome<Item> {
+    /* // Linked List
     public Deque<Character> wordToDeque(String word) {
         Deque d = new LinkedListDeque();
         for (int i = 0; i < word.length(); i++) {
+            d.addLast(word.charAt(i));
+        }
+        return d;
+    }
+
+     */
+
+    // Array
+    public Deque<Character> wordToDeque(String word) {
+        Deque d = new ArrayDeque();
+        for (int i = 0; i < word.length(); i++) {
+            if (i == 0) {
+                d.addFirst(word.charAt(i));
+                continue;
+            }
             d.addLast(word.charAt(i));
         }
         return d;
@@ -20,7 +36,7 @@ public class Palindrome<Item> {
 
     public boolean isPalindrome(String word) {
         Deque d = wordToDeque(word);
-        Deque dReversed = reverse(d, new LinkedListDeque());
+        Deque dReversed = reverse(d, new ArrayDeque());
         String actual = "";
         for (int i = 0; i < word.length(); i++) {
             actual += dReversed.removeFirst();
