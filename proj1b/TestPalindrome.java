@@ -28,5 +28,8 @@ public class TestPalindrome {
         assertTrue(palindrome.isPalindrome("flake", obo));
         assertFalse(palindrome.isPalindrome("racecar"));
         assertFalse(palindrome.isPalindrome("cat"));
+
+        OffByN obn = new OffByN(5);
+        assertTrue(palindrome.isPalindrome("ajdof", obn));
     }
 }
