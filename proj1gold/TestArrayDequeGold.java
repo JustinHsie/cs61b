@@ -11,6 +11,7 @@ public class TestArrayDequeGold {
          */
 
         StudentArrayDeque<Integer> sad1 = new StudentArrayDeque<>();
+        String message = "";
 
         for (int i = 0; i < 500; i += 1) {
             double numberBetweenZeroAndOne = StdRandom.uniform(6);
@@ -19,29 +20,35 @@ public class TestArrayDequeGold {
 
             if (numberBetweenZeroAndOne < 1) {
                 sad1.addLast(i);
-                ads1.addLast(i);;
+                ads1.addLast(i);
+                message = message.concat("addLast(" + i + ")\n");
             } else if (numberBetweenZeroAndOne == 1){
                 sad1.addFirst(i);
                 ads1.addFirst(i);
+                message = message.concat("addFirst(" + i + ")\n");
             } else if (ads1.size() == 0) {
                 i -= 1;
                 continue;
             } else if (numberBetweenZeroAndOne == 2) {
                 actual = sad1.removeLast();
                 expected = ads1.removeLast();
-                assertEquals(expected, actual);
+                message = message.concat("removeLast()\n");
+                assertEquals(message, expected, actual);
             } else if (numberBetweenZeroAndOne == 3) {
                 actual = sad1.removeFirst();
                 expected = ads1.removeFirst();
-                assertEquals(expected, actual);
+                message = message.concat("removeFirst()\n");
+                assertEquals(message, expected, actual);
             } else if (numberBetweenZeroAndOne == 4) {
                 actual = sad1.get(i % ads1.size());
                 expected = ads1.get(i % ads1.size());
-                assertEquals(expected, actual);
+                message = message.concat("get(" + i % ads1.size() + ")\n");
+                assertEquals(message, expected, actual);
             } else if (numberBetweenZeroAndOne == 5) {
                 actual = sad1.size();
                 expected = ads1.size();
-                assertEquals(expected, actual);
+                message = message.concat("size()\n");
+                assertEquals(message, expected, actual);
             }
         }
     }
