@@ -30,4 +30,24 @@ public class Palindrome<Item> {
         }
         return false;
     }
+
+    public boolean isPalindrome(String word, CharacterComparator cc) {
+        Deque d = wordToDeque(word);
+        Deque dReversed = reverse(d, new LinkedListDeque());
+        String dRev = "";
+        for (int i = 0; i < word.length(); i++) {
+            dRev += dReversed.removeFirst();
+        }
+
+        boolean result = true;
+        for (int i = 0; i < word.length(); i++) {
+            if (i == word.length() / 2) {
+                continue;
+            }
+            if (!cc.equalChars(word.charAt(i), dRev.charAt(i))) {
+                result = false;
+            }
+        }
+        return result;
+    }
 }
