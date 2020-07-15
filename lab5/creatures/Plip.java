@@ -115,16 +115,24 @@ public class Plip extends Creature {
         // Rule 1
         Deque<Direction> emptyNeighbors = new ArrayDeque<>();
         boolean anyClorus = false;
-        // TODO
-        // (Google: Enhanced for-loop over keys of NEIGHBORS?)
-        // for () {...}
 
-        if (false) { // FIXME
-            // TODO
+        for(Direction key : neighbors.keySet()) {
+            Occupant value = neighbors.get(key);
+            if (value.name().equals("empty")) {
+                emptyNeighbors.addFirst(key);
+            }
+            if (value.name().equals("clorus")) {
+                anyClorus = true;
+            }
+        }
+
+        if (emptyNeighbors.size() == 0) {
+            return new Action(Action.ActionType.STAY);
         }
 
         // Rule 2
         // HINT: randomEntry(emptyNeighbors)
+        else if ()
 
         // Rule 3
 
