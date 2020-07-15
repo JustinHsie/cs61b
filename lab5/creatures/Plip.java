@@ -1,5 +1,6 @@
 package creatures;
 
+import edu.princeton.cs.algs4.StdRandom;
 import huglife.Creature;
 import huglife.Direction;
 import huglife.Action;
@@ -107,6 +108,12 @@ public class Plip extends Creature {
         return new Plip(babyEnergy);
     }
 
+    private Direction randomEntry(Deque<Direction> emptyNeighbors) {
+        int selection = StdRandom.uniform(emptyNeighbors.size());
+        Direction[] array = emptyNeighbors.toArray(new Direction[emptyNeighbors.size()]);
+        return array[selection];
+    }
+
     /**
      * Plips take exactly the following actions based on NEIGHBORS:
      * 1. If no empty adjacent spaces, STAY.
@@ -141,7 +148,7 @@ public class Plip extends Creature {
 
         // Rule 2
         // HINT: randomEntry(emptyNeighbors)
-        else if (emptyNeighbors.size() > 0) {
+        else if (energy >= 1) {
 
         }
 
