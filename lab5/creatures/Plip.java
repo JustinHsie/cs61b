@@ -31,6 +31,15 @@ public class Plip extends Creature {
     private int b;
 
     /**
+     * fraction of energy to retain when replicating.
+     */
+    private double repEnergyRetained = 0.5;
+    /**
+     * fraction of energy to bestow upon offspring.
+     */
+    private double repEnergyGiven = 0.5;
+
+    /**
      * creates plip with energy equal to E.
      */
     public Plip(double e) {
@@ -93,9 +102,9 @@ public class Plip extends Creature {
      * Plip.
      */
     public Plip replicate() {
-        energy = energy / 2;
-        Plip baby = new Plip(energy);
-        return baby;
+        double babyEnergy = energy * repEnergyGiven;
+        energy = energy * repEnergyRetained;
+        return new Plip(babyEnergy);
     }
 
     /**
@@ -132,7 +141,9 @@ public class Plip extends Creature {
 
         // Rule 2
         // HINT: randomEntry(emptyNeighbors)
-        else if ()
+        else if (emptyNeighbors.size() > 0) {
+
+        }
 
         // Rule 3
 
