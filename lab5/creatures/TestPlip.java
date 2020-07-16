@@ -102,7 +102,28 @@ public class TestPlip {
 
         assertEquals(expected, actual);
 
+    }
 
-        // We don't have Cloruses yet, so we can't test behavior for when they are nearby right now.
+    @Test
+    public void testRun() {
+        Plip p = new Plip(.99);
+        Clorus c = new Clorus(2);
+        HashMap<Direction, Occupant> run = new HashMap<Direction, Occupant>();
+        run.put(Direction.TOP, c);
+        run.put(Direction.BOTTOM, new Empty());
+        run.put(Direction.LEFT, new Empty());
+        run.put(Direction.RIGHT, new Empty());
+
+        int stay = 0;
+        int move = 0;
+        for (int i = 0; i < 30; i += 1) {
+            Action actual = p.chooseAction(run);
+            if (actual.equals(new Action(Action.ActionType.STAY))) {
+                stay += 1;
+            }
+            move += 1;
+        }
+        assertTrue(stay > 0);
+        assertTrue(move > 0);
     }
 }
