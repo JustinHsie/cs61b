@@ -111,9 +111,9 @@ public class Plip extends Creature {
         return new Plip(babyEnergy);
     }
 
-    private Direction randomEntry(Deque<Direction> emptyNeighbors) {
-        int selection = StdRandom.uniform(emptyNeighbors.size());
-        Direction[] array = emptyNeighbors.toArray(new Direction[emptyNeighbors.size()]);
+    private Direction randomEntry(Deque<Direction> neighbors) {
+        int selection = StdRandom.uniform(neighbors.size());
+        Direction[] array = neighbors.toArray(new Direction[neighbors.size()]);
         return array[selection];
     }
 
@@ -153,7 +153,7 @@ public class Plip extends Creature {
         }
 
         /**
-         * Otherwise, if energy >= 1.0, replicate to available space
+         * Otherwise, if energy >= 1.0, replicate to random available space
          */
         else if (energy >= 1) {
             Direction direction = randomEntry(emptyNeighbors);
