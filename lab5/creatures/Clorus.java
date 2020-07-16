@@ -1,5 +1,6 @@
 package creatures;
 
+import edu.princeton.cs.algs4.StdRandom;
 import huglife.Creature;
 import huglife.Direction;
 import huglife.Action;
@@ -39,24 +40,72 @@ public class Clorus extends Creature{
     }
 
     public void attack(Creature c) {
-        // ToDo
+        energy += c.energy();
     }
 
     public void move() {
-        // ToDo
+        energy -= 0.03;
+        energy = Math.max(energy, 0);
     }
 
     public void stay() {
-        // ToDo
+        energy -= 0.01;
+        energy = Math.max(energy, 0);
+    }
+
+    private Direction randomEntry(Deque<Direction> neighbors) {
+        int selection = StdRandom.uniform(neighbors.size());
+        Direction[] array = neighbors.toArray(new Direction[neighbors.size()]);
+        return array[selection];
     }
 
     public Action chooseAction(Map<Direction, Occupant> neighbors) {
-        // ToDo
-        return new Action(Action.ActionType.STAY);
+
+        /**
+         * If no empty squares, stay
+         */
+        Deque<Direction> emptyNeighbors = new ArrayDeque<>();
+        Deque<Direction> plipNeighbors = new ArrayDeque<>();
+
+        for (Direction key : neighbors.keySet()) {
+            Occupant value = neighbors.get(key);
+            if (value.name().equals("empty")) {
+                emptyNeighbors.addFirst(key);
+            }
+            if (value.name().equals("plip")) {
+                plipNeighbors.addFirst(key);
+            }
+        }
+        if (emptyNeighbors.size() == 0) {
+            return new Action(Action.ActionType.STAY);
+        }
+
+        /**
+         * Otherwise, if plips seen, attack one randomly
+         */
+        else if (plipNeighbors.size() > 0) {
+            Direction direction = randomEntry(plipNeighbors);
+            return new Action(Action.ActionType.ATTACK, direction);
+        }
+
+        /**
+         * Otherwise, if energy >= 1, replicate to random empty space
+         */
+        else if (energy >= 1) {
+            Direction direction = randomEntry(emptyNeighbors);
+            return new Action(Action.ActionType.REPLICATE, direction);
+        }
+
+        /**
+         * Otherwise, move to random empty space
+         */
+        Direction direction = randomEntry(emptyNeighbors);
+        return new Action(Action.ActionType.MOVE, direction);
     }
 
     public Clorus replicate() {
-        // ToDo
-        return new Clorus();
+        double babyEnergy = energy * repEnergyGiven;
+        energy = energy * repEnergyRetained;
+        return new Clorus(babyEnergy);
     }
 }
