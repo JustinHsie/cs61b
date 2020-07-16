@@ -30,7 +30,10 @@ public class Plip extends Creature {
      * blue color.
      */
     private int b;
-
+    /**
+     * probability of taking a move when empty space available
+     */
+    private double moveProbability = 0.5;
     /**
      * fraction of energy to retain when replicating.
      */
@@ -128,7 +131,10 @@ public class Plip extends Creature {
      * for an example to follow.
      */
     public Action chooseAction(Map<Direction, Occupant> neighbors) {
-        // Rule 1
+
+        /**
+         * If no empty spaces, stay
+         */
         Deque<Direction> emptyNeighbors = new ArrayDeque<>();
         boolean anyClorus = false;
 
@@ -146,15 +152,27 @@ public class Plip extends Creature {
             return new Action(Action.ActionType.STAY);
         }
 
-        // Rule 2
+        /**
+         * Otherwise, if energy >= 1.0, replicate to available space
+         */
         else if (energy >= 1) {
             Direction direction = randomEntry(emptyNeighbors);
             return new Action(Action.ActionType.REPLICATE, direction);
         }
 
-        // Rule 3
+        /**
+         * Otherwise, if neighbor clorus, move to empty space with prob 50%
+         */
+        else if (anyClorus == true) {
+            if (Math.random() < moveProbability) {
+                Direction direction = randomEntry(emptyNeighbors);
+                return new Action(Action.ActionType.MOVE, direction);
+            }
+        }
 
-        // Rule 4
+        /**
+         * Otherwise, stay
+         */
         return new Action(Action.ActionType.STAY);
     }
 }
