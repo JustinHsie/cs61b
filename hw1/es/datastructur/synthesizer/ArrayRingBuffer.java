@@ -12,6 +12,8 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
     private int capacity;
     /* Array for storing the buffer data. */
     private T[] rb;
+    /* Pointer for iteration */
+    private int pos;
 
     /**
      * Create a new ArrayRingBuffer with the given capacity.
@@ -29,12 +31,12 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
      * Implements ArrayRingBufferIterator
      */
     private class ArrayRingBufferIterator implements Iterator {
-        private int pos;
+
         public ArrayRingBufferIterator() {
             pos = first;
         }
         public boolean hasNext() {
-            return pos < last;
+            return pos != last;
         }
         public T next() {
             T returnItem = rb[pos];
@@ -99,7 +101,9 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
         T item = rb[first];
         rb[first] = null;
         first = plusOne(first);
+        pos = first;
         fillCount -= 1;
+
         return item;
     }
 
