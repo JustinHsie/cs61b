@@ -28,31 +28,6 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
     }
 
     /**
-     * Implements ArrayRingBufferIterator
-     */
-    private class ArrayRingBufferIterator implements Iterator {
-
-        public ArrayRingBufferIterator() {
-            pos = first;
-        }
-        public boolean hasNext() {
-            return pos != last;
-        }
-        public T next() {
-            T returnItem = rb[pos];
-            pos = plusOne(pos);
-            return returnItem;
-        }
-    }
-
-    /**
-     * Returns iterator
-     */
-    @Override
-    public Iterator iterator() {
-        return new ArrayRingBufferIterator();
-    }
-    /**
      * Returns size of buffer
      */
     @Override
@@ -120,7 +95,53 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
         return rb[first];
     }
 
-    // TODO: When you get to part 4, implement the needed code to support
-    //       iteration and equals.
+    /**
+     * Implements ArrayRingBufferIterator
+     */
+    private class ArrayRingBufferIterator implements Iterator {
+
+        public ArrayRingBufferIterator() {
+            pos = first;
+        }
+        public boolean hasNext() {
+            return pos != last;
+        }
+        public T next() {
+            T returnItem = rb[pos];
+            pos = plusOne(pos);
+            return returnItem;
+        }
+    }
+
+    /**
+     * Returns iterator
+     */
+    @Override
+    public Iterator iterator() {
+        return new ArrayRingBufferIterator();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null) {
+            return false;
+        }
+        if (this == o) {
+            return true;
+        }
+        if (this.getClass() != o.getClass()) {
+            return false;
+        }
+        ArrayRingBuffer<T> other = (ArrayRingBuffer<T>) o;
+        if (this.fillCount != other.fillCount) {
+            return false;
+        }
+        for (int i = first; i != last; plusOne(i)) {
+            if (this.rb[i] != other.rb[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
-    // TODO: Remove all comments that say TODO when you're done.
+
