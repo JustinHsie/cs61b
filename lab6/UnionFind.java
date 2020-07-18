@@ -1,34 +1,37 @@
+import java.util.Arrays;
+
 public class UnionFind {
-
-    // TODO - Add instance variables?
-
+    int[] dsArray;
     /* Creates a UnionFind data structure holding n vertices. Initially, all
        vertices are in disjoint sets. */
     public UnionFind(int n) {
-        // TODO
+        dsArray = new int[n];
+        Arrays.fill(dsArray, -1);
     }
 
     /* Throws an exception if v1 is not a valid index. */
     private void validate(int vertex) {
-        // TODO
+        if (vertex >= dsArray.length || vertex < 0) {
+            throw new IllegalArgumentException("Out of bounds");
+        }
     }
 
     /* Returns the size of the set v1 belongs to. */
     public int sizeOf(int v1) {
-        // TODO
-        return -1;
+        return parent(find(v1));
     }
 
     /* Returns the parent of v1. If v1 is the root of a tree, returns the
        negative size of the tree for which v1 is the root. */
     public int parent(int v1) {
-        // TODO
-        return -1;
+        return dsArray[v1];
     }
 
     /* Returns true if nodes v1 and v2 are connected. */
     public boolean connected(int v1, int v2) {
-        // TODO
+        if (find(v1) == find(v2)) {
+            return true;
+        }
         return false;
     }
 
@@ -38,14 +41,33 @@ public class UnionFind {
        vertex with itself or vertices that are already connected should not 
        change the sets but may alter the internal structure of the data. */
     public void union(int v1, int v2) {
-        // TODO
+        int rootV1 = find(v1);
+        int rootV2 = find(v2);
+        if (parent(rootV1) < parent(rootV2)) {
+            dsArray[v2] = rootV1;
+        }
+        else {
+            dsArray[v1] = rootV2;
+        }
     }
 
     /* Returns the root of the set V belongs to. Path-compression is employed
        allowing for fast search-time. */
     public int find(int vertex) {
-        // TODO
-        return -1;
+        int root;
+        int vOrig = vertex;
+        while(parent(vertex) >= 0) {
+            vertex = parent(vertex);
+        }
+        root = vertex;
+
+        // Path-compression
+        while(parent(vOrig) >= 0) {
+            int temp = parent(vOrig);
+            dsArray[vOrig] = root;
+            vOrig = temp;
+        }
+        return root;
     }
 
 }
