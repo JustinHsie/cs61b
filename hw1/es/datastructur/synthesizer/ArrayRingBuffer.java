@@ -26,6 +26,31 @@ public class ArrayRingBuffer<T> implements BoundedQueue<T> {
     }
 
     /**
+     * Implements ArrayRingBufferIterator
+     */
+    private class ArrayRingBufferIterator implements Iterator {
+        private int pos;
+        public ArrayRingBufferIterator() {
+            pos = first;
+        }
+        public boolean hasNext() {
+            return pos < last;
+        }
+        public T next() {
+            T returnItem = rb[pos];
+            pos = plusOne(pos);
+            return returnItem;
+        }
+    }
+
+    /**
+     * Returns iterator
+     */
+    @Override
+    public Iterator iterator() {
+        return new ArrayRingBufferIterator();
+    }
+    /**
      * Returns size of buffer
      */
     @Override
