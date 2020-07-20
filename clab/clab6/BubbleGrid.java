@@ -1,3 +1,5 @@
+import edu.princeton.cs.algs4.WeightedQuickUnionUF;
+
 public class BubbleGrid {
     private int[][] grid;
 
@@ -13,7 +15,14 @@ public class BubbleGrid {
      * are unique, valid locations in the grid. Must be non-destructive
      * and have no side-effects to grid. */
     public int[] popBubbles(int[][] darts) {
-        // TODO
+        int[] ds = new int[grid.length * grid[0].length];
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (i == 0) {
+
+                }
+            }
+        }
         return null;
     }
 }
