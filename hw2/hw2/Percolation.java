@@ -46,12 +46,25 @@ public class Percolation {
         }
     }
 
+    // open virtual top or bottom
+    private void unionVirtual(int row, int col) {
+        if (row == 0) {
+            grid.union(N * N + 1, rcTo1D(row, col));
+        }
+        else if (col == 0) {
+            grid.union(N * N + 2, rcTo1D(row, col));
+        }
+    }
+
     // open the site (row, col) if it is not open already
     public void open(int row, int col) {
-        if (row <= 0 || row >= N - 1 || col <= 0 || col >= N - 1) {
+        if (row < 0 || row > N - 1 || col < 0 || col > N - 1) {
             throw new java.lang.IndexOutOfBoundsException();
         }
-        if (!isOpen(row, col)) {
+        if (!isOpen(row, col) && (row == 0 || col == 0)) {
+            unionVirtual(row, col);
+        }
+        else if (!isOpen(row, col)) {
             sites[row][col] = true;
             checkNeighbor(row, col);
             numberOfOpenSites++;
