@@ -99,7 +99,9 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        // TODO
+        if (grid.find(N * N) == grid.find(N * N + 1)) {
+            return true;
+        }
         return false;
     }
 

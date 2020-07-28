@@ -21,4 +21,15 @@ public class TestPercolation {
         test.open(0, 3);
         assertTrue(test.isFull(1, 3));
     }
+    @Test
+    public void testPercolates() {
+        Percolation test = new Percolation(5);
+        test.open(1, 3);
+        test.open(0, 3);
+        test.open(4, 3);
+        assertFalse(test.percolates());
+        test.open(3, 3);
+        test.open(2, 3);
+        assertTrue(test.percolates());
+    }
 }
