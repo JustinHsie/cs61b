@@ -17,7 +17,7 @@ public class Percolation {
             throw new java.lang.IndexOutOfBoundsException("N must be greater than 0");
         }
         this.N = N;
-        grid = new WeightedQuickUnionUF(N * N);
+        grid = new WeightedQuickUnionUF(N * N + 2);
         sites = new boolean[N][N];
     }
 
@@ -26,32 +26,52 @@ public class Percolation {
         return row * N + col;
     }
 
+    // checks if neighbors are open and unions if they are
+    private void checkNeighbor(int row, int col) {
+        // upper neighbor
+        if (isOpen(row - 1, col) && row - 1 >= 0) {
+            grid.union(rcTo1D(row, col), rcTo1D(row - 1, col));
+        }
+        // left neighbor
+        if (isOpen(row, col - 1) && col - 1 >= 0) {
+            grid.union(rcTo1D(row, col), rcTo1D(row, col - 1));
+        }
+        // bottom neighbor
+        if (isOpen(row + 1, col) && row + 1 <= N - 1) {
+            grid.union(rcTo1D(row, col), rcTo1D(row + 1, col));
+        }
+        // right neighbor
+        if (isOpen(row, col + 1) && col + 1 <= N - 1) {
+            grid.union(rcTo1D(row, col), rcTo1D(row, col + 1));
+        }
+    }
+
     // open the site (row, col) if it is not open already
     public void open(int row, int col) {
-        if(row < 0 || row > N - 1 || col < 0 || col > N - 1) {
+        if (row <= 0 || row >= N - 1 || col <= 0 || col >= N - 1) {
             throw new java.lang.IndexOutOfBoundsException();
         }
         if (!isOpen(row, col)) {
             sites[row][col] = true;
+            checkNeighbor(row, col);
             numberOfOpenSites++;
         }
     }
 
     // is the site (row, col) open?
     public boolean isOpen(int row, int col) {
-        if(row < 0 || row > N - 1 || col < 0 || col > N - 1) {
+        if (row < 0 || row > N - 1 || col < 0 || col > N - 1) {
             throw new java.lang.IndexOutOfBoundsException();
         }
-        if(sites[row][col]) return true;
+        if (sites[row][col]) return true;
         return false;
     }
 
     // is the site (row, col) full?
     public boolean isFull(int row, int col) {
-        if(row < 0 || row > N - 1 || col < 0 || col > N - 1) {
+        if (row < 0 || row > N - 1 || col < 0 || col > N - 1) {
             throw new java.lang.IndexOutOfBoundsException();
         }
-        // TODO
         return false;
     }
 
