@@ -29,19 +29,19 @@ public class Percolation {
     // checks if neighbors are open and unions if they are
     private void checkNeighbor(int row, int col) {
         // upper neighbor
-        if (isOpen(row - 1, col) && row - 1 >= 0) {
+        if (row - 1 >= 0 && isOpen(row - 1, col)) {
             grid.union(rcTo1D(row, col), rcTo1D(row - 1, col));
         }
         // left neighbor
-        if (isOpen(row, col - 1) && col - 1 >= 0) {
+        if (col - 1 >= 0 && isOpen(row, col - 1)) {
             grid.union(rcTo1D(row, col), rcTo1D(row, col - 1));
         }
         // bottom neighbor
-        if (isOpen(row + 1, col) && row + 1 <= N - 1) {
+        if (row + 1 <= N - 1 && isOpen(row + 1, col)) {
             grid.union(rcTo1D(row, col), rcTo1D(row + 1, col));
         }
         // right neighbor
-        if (isOpen(row, col + 1) && col + 1 <= N - 1) {
+        if (col + 1 <= N - 1 && isOpen(row, col + 1)) {
             grid.union(rcTo1D(row, col), rcTo1D(row, col + 1));
         }
     }
@@ -49,10 +49,10 @@ public class Percolation {
     // open virtual top or bottom
     private void unionVirtual(int row, int col) {
         if (row == 0) {
-            grid.union(N * N + 1, rcTo1D(row, col));
+            grid.union(N * N, rcTo1D(row, col));
         }
-        else if (col == 0) {
-            grid.union(N * N + 2, rcTo1D(row, col));
+        else if (row == N - 1) {
+            grid.union(N * N + 1, rcTo1D(row, col));
         }
     }
 
@@ -61,8 +61,10 @@ public class Percolation {
         if (row < 0 || row > N - 1 || col < 0 || col > N - 1) {
             throw new java.lang.IndexOutOfBoundsException();
         }
-        if (!isOpen(row, col) && (row == 0 || col == 0)) {
+        if (!isOpen(row, col) && (row == 0 || row == N - 1)) {
+            sites[row][col] = true;
             unionVirtual(row, col);
+            checkNeighbor(row, col);
         }
         else if (!isOpen(row, col)) {
             sites[row][col] = true;
@@ -76,14 +78,16 @@ public class Percolation {
         if (row < 0 || row > N - 1 || col < 0 || col > N - 1) {
             throw new java.lang.IndexOutOfBoundsException();
         }
-        if (sites[row][col]) return true;
-        return false;
+        return sites[row][col];
     }
 
     // is the site (row, col) full?
     public boolean isFull(int row, int col) {
         if (row < 0 || row > N - 1 || col < 0 || col > N - 1) {
             throw new java.lang.IndexOutOfBoundsException();
+        }
+        if (grid.find(rcTo1D(row, col)) == grid.find(N * N)) {
+            return true;
         }
         return false;
     }
@@ -100,5 +104,10 @@ public class Percolation {
     }
 
     // use for unit testing
-    public static void main(String[] args) {}
+    public static void main(String[] args) {
+        Percolation test = new Percolation(5);
+        test.open(1, 3);
+        test.open(0, 3);
+        test.isFull(1, 3);
+    }
 }
