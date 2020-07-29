@@ -7,6 +7,7 @@ import static org.junit.Assert.*;
 public class Percolation {
 
     WeightedQuickUnionUF grid;
+    WeightedQuickUnionUF gridNoBottom;
     boolean[][] sites;
     int N;
     int numberOfOpenSites = 0;
@@ -18,6 +19,7 @@ public class Percolation {
         }
         this.N = N;
         grid = new WeightedQuickUnionUF(N * N + 2);
+        gridNoBottom = new WeightedQuickUnionUF(N * N + 1);
         sites = new boolean[N][N];
     }
 
@@ -31,18 +33,22 @@ public class Percolation {
         // upper neighbor
         if (row - 1 >= 0 && isOpen(row - 1, col)) {
             grid.union(rcTo1D(row, col), rcTo1D(row - 1, col));
+            gridNoBottom.union(rcTo1D(row, col), rcTo1D(row - 1, col));
         }
         // left neighbor
         if (col - 1 >= 0 && isOpen(row, col - 1)) {
             grid.union(rcTo1D(row, col), rcTo1D(row, col - 1));
+            gridNoBottom.union(rcTo1D(row, col), rcTo1D(row, col - 1));
         }
         // bottom neighbor
         if (row + 1 <= N - 1 && isOpen(row + 1, col)) {
             grid.union(rcTo1D(row, col), rcTo1D(row + 1, col));
+            gridNoBottom.union(rcTo1D(row, col), rcTo1D(row + 1, col));
         }
         // right neighbor
         if (col + 1 <= N - 1 && isOpen(row, col + 1)) {
             grid.union(rcTo1D(row, col), rcTo1D(row, col + 1));
+            gridNoBottom.union(rcTo1D(row, col), rcTo1D(row, col + 1));
         }
     }
 
@@ -50,6 +56,7 @@ public class Percolation {
     private void unionVirtual(int row, int col) {
         if (row == 0) {
             grid.union(N * N, rcTo1D(row, col));
+            gridNoBottom.union(N * N, rcTo1D(row, col));
         }
         else if (row == N - 1) {
             grid.union(N * N + 1, rcTo1D(row, col));
@@ -65,6 +72,7 @@ public class Percolation {
             sites[row][col] = true;
             unionVirtual(row, col);
             checkNeighbor(row, col);
+            numberOfOpenSites++;
         }
         else if (!isOpen(row, col)) {
             sites[row][col] = true;
@@ -86,7 +94,7 @@ public class Percolation {
         if (row < 0 || row > N - 1 || col < 0 || col > N - 1) {
             throw new java.lang.IndexOutOfBoundsException();
         }
-        if (grid.find(rcTo1D(row, col)) == grid.find(N * N)) {
+        if (gridNoBottom.find(rcTo1D(row, col)) == gridNoBottom.find(N * N)) {
             return true;
         }
         return false;
@@ -99,10 +107,7 @@ public class Percolation {
 
     // does the system percolate?
     public boolean percolates() {
-        if (grid.find(N * N) == grid.find(N * N + 1)) {
-            return true;
-        }
-        return false;
+        return grid.find(N * N) == grid.find(N * N + 1);
     }
 
     // use for unit testing
