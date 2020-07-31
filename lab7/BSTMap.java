@@ -1,9 +1,7 @@
-import edu.princeton.cs.algs4.BST;
-
 import java.util.Iterator;
 import java.util.Set;
 
-public class BSTMap<K, V> implements Map61B<K, V> {
+public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
     private Node root;
 
@@ -21,7 +19,7 @@ public class BSTMap<K, V> implements Map61B<K, V> {
         }
     }
 
-    public BSTMap(K key, V val) {}
+    public BSTMap() {}
 
     @Override
     public Iterator<K> iterator() {throw new UnsupportedOperationException();}
@@ -37,7 +35,24 @@ public class BSTMap<K, V> implements Map61B<K, V> {
     /* Returns the value to which the specified key is mapped, or null if this
      * map contains no mapping for the key.
      */
-    public V get(K key) {return null;}
+    public V get(K key) {
+        return get(root, key);
+    }
+
+    private V get(Node x, K key) {
+        if (key == null) throw new IllegalArgumentException();
+        if (x == null) return null;
+        int cmp = key.compareTo(x.key);
+        if (cmp < 0) {
+            return get(x.left, key);
+        }
+        else if (cmp > 0) {
+            return get(x.right, key);
+        }
+        else {
+            return x.val;
+        }
+    }
 
     @Override
     /* Returns the number of key-value mappings in this map. */
