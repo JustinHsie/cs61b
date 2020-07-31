@@ -26,7 +26,9 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
 
     @Override
     /* Removes all of the mappings from this map. */
-    public void clear() {}
+    public void clear() {
+        root = null;
+    }
 
     @Override
     /* Returns true if this map contains a mapping for the specified key. */
