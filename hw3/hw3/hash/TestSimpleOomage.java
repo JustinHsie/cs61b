@@ -22,10 +22,25 @@ public class TestSimpleOomage {
 
     @Test
     public void testHashCodePerfect() {
-        /* TODO: Write a test that ensures the hashCode is perfect,
+        /* Write a test that ensures the hashCode is perfect,
           meaning no two SimpleOomages should EVER have the same
           hashCode UNLESS they have the same red, blue, and green values!
-         */
+        */
+
+        boolean collision = false;
+        HashSet<Integer> hashSet = new HashSet<>();
+        for (int r = 0; r < 255; r += 5) {
+            for (int g = 0; g < 255; g += 5) {
+                for (int b = 0; b < 255; b += 5) {
+                    SimpleOomage ooA = new SimpleOomage(r, g, b);
+                    if (!hashSet.add(ooA.hashCode())) {
+                        collision = true;
+                        break;
+                    }
+                }
+            }
+        }
+        assertFalse(collision);
     }
 
     @Test
