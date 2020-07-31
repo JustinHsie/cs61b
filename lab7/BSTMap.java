@@ -6,6 +6,7 @@ import java.util.Set;
 public class BSTMap<K, V> implements Map61B<K, V> {
 
     private Node root;
+
     private class Node {
         private K key;
         private V val;
@@ -40,7 +41,14 @@ public class BSTMap<K, V> implements Map61B<K, V> {
 
     @Override
     /* Returns the number of key-value mappings in this map. */
-    public int size() {return 0;}
+    public int size() {
+        return size(root);
+    }
+
+    private int size(Node x) {
+        if (x == null) return 0;
+        else return x.size;
+    }
 
     @Override
     /* Associates the specified value with the specified key in this map. */
