@@ -25,11 +25,15 @@ public class BSTMap<K extends Comparable<K>, V> implements Map61B<K, V> {
     public Iterator<K> iterator() {throw new UnsupportedOperationException();}
 
     @Override
+    /* Removes all of the mappings from this map. */
     public void clear() {}
 
     @Override
     /* Returns true if this map contains a mapping for the specified key. */
-    public boolean containsKey(K key) {return false;}
+    public boolean containsKey(K key) {
+        if (key == null) throw new IllegalArgumentException();
+        return get(key) != null;
+    }
 
     @Override
     /* Returns the value to which the specified key is mapped, or null if this
