@@ -1,7 +1,26 @@
+import edu.princeton.cs.algs4.BST;
+
 import java.util.Iterator;
 import java.util.Set;
 
 public class BSTMap<K, V> implements Map61B<K, V> {
+
+    private Node root;
+    private class Node {
+        private K key;
+        private V val;
+        private Node left, right;
+        private int size;
+
+        private Node(K key, V val, int size) {
+            this.key = key;
+            this.val = val;
+            this.size = size;
+
+        }
+    }
+
+    public BSTMap(K key, V val) {}
 
     @Override
     public Iterator<K> iterator() {throw new UnsupportedOperationException();}
@@ -43,6 +62,7 @@ public class BSTMap<K, V> implements Map61B<K, V> {
      * throw an UnsupportedOperationException.*/
     public V remove(K key, V value) {throw new UnsupportedOperationException();}
 
+    public void printInOrder() {}
 
 
 }
