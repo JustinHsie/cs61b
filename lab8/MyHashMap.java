@@ -2,6 +2,23 @@ import java.util.Iterator;
 import java.util.Set;
 
 public class MyHashMap<K, V> implements Map61B<K, V> {
+
+    int initialSize;
+    double loadFactor;
+
+    public MyHashMap() {
+        initialSize = 16;
+        loadFactor = 0.75;
+    }
+    public MyHashMap(int initialSize) {
+        this.initialSize = initialSize;
+        loadFactor = 0.75;
+    }
+    public MyHashMap(int initialSize, double loadFactor) {
+        this.initialSize = initialSize;
+        this.loadFactor = loadFactor;
+    }
+
     @Override
     public Iterator<K> iterator() {
         return null;
