@@ -1,22 +1,38 @@
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Set;
 
 public class MyHashMap<K, V> implements Map61B<K, V> {
 
-    int initialSize;
-    double loadFactor;
+    private int numBuckets;
+    private double loadFactor;
+    private HashSet keys;
+    private LinkedList<V>[] ll;
 
     public MyHashMap() {
-        initialSize = 16;
+        numBuckets = 16;
         loadFactor = 0.75;
+        ll = (LinkedList<V>[]) new LinkedList[numBuckets];
+        for (int i = 0; i < numBuckets; i++) {
+            ll[i] = new LinkedList<V>();
+        }
     }
     public MyHashMap(int initialSize) {
-        this.initialSize = initialSize;
+        numBuckets = initialSize;
         loadFactor = 0.75;
+        ll = (LinkedList<V>[]) new LinkedList[numBuckets];
+        for (int i = 0; i < numBuckets; i++) {
+            ll[i] = new LinkedList<V>();
+        }
     }
     public MyHashMap(int initialSize, double loadFactor) {
-        this.initialSize = initialSize;
+        numBuckets = initialSize;
         this.loadFactor = loadFactor;
+        ll = (LinkedList<V>[]) new LinkedList[numBuckets];
+        for (int i = 0; i < numBuckets; i++) {
+            ll[i] = new LinkedList<V>();
+        }
     }
 
     @Override
@@ -30,7 +46,9 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
 
     /** Returns true if this map contains a mapping for the specified key. */
     @Override
-    public boolean containsKey(K key) {return false;}
+    public boolean containsKey(K key) {
+        return keys.contains(key);
+    }
 
     /**
      * Returns the value to which the specified key is mapped, or null if this
@@ -61,7 +79,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * UnsupportedOperationException.
      */
     @Override
-    public V remove(K key) {return null;}
+    public V remove(K key) {throw new UnsupportedOperationException();}
 
     /**
      * Removes the entry for the specified key only if it is currently mapped to
