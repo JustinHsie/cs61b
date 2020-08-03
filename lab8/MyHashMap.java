@@ -28,9 +28,9 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
             this.val = v;
             this.next = n;
         }
-        V get(K k) {
+        Entry get(K k) {
             if (k.equals(key)) {
-                return this.val;
+                return this;
             }
             if (next == null) {
                 return null;
@@ -91,11 +91,15 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     @Override
     public V get(K key) {
         int i = key.hashCode();
-        return entries[i].get(key);
+        Entry lookup = entries[i].get(key);
+        if (lookup == null) {
+            return null;
+        }
+        return lookup.val;
     }
 
-    private void resize(int chains) {
-        MyHashMap<K, V> temp = new MyHashMap<K, V>(chains);
+    private void resize(int buckets) {
+        MyHashMap<K, V> temp = new MyHashMap<K, V>(buckets);
         for (int i = 0; i < numBuckets; i++) {
             for ()
         }
@@ -103,7 +107,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     /** Returns the number of key-value mappings in this map. */
     @Override
     public int size() {
-        return n;
+        return size;
     }
 
     /**
@@ -112,8 +116,15 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * the old value is replaced.
      */
     @Override
-    public void put(K key, V value) {
-
+    public void put(K key, V val) {
+        if ((double) size / numBuckets > loadFactor) {
+            resize(2 * numBuckets);
+        }
+        int i = key.hashCode();
+        if (!containsKey(key)) {
+            size++;
+            entries[i].put(key, val);
+        }
     }
 
     /** Returns a Set view of the keys contained in this map. */
