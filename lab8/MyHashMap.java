@@ -9,21 +9,29 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     private double loadFactor;
     private int n;
     private HashSet keys;
-    private Entry entry[];
+    private Entry[] entries;
+    private Entry list;
 
     // Entry code from Josh Hug ULLMap
     private class Entry {
         K key;
         V val;
         Entry next;
-        public Entry(K k, V v, Entry n) {
+
+        Entry() {
+            key = null;
+            val = null;
+            next = null;
+        }
+
+        Entry(K k, V v, Entry n) {
             this.key = k;
             this.val = v;
             this.next = n;
         }
-        public Entry get(K k) {
+        V get(K k) {
             if (k.equals(key)) {
-                return this;
+                return this.val;
             }
             if (next == null) {
                 return null;
@@ -35,25 +43,25 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     public MyHashMap() {
         numBuckets = 16;
         loadFactor = 0.75;
-        ll = (LinkedList<V>[]) new LinkedList[numBuckets];
+        entries = (Entry[]) new Object[numBuckets];
         for (int i = 0; i < numBuckets; i++) {
-            ll[i] = new LinkedList<V>();
+            entries[i] = new Entry();
         }
     }
     public MyHashMap(int initialSize) {
         numBuckets = initialSize;
         loadFactor = 0.75;
-        ll = (LinkedList<V>[]) new LinkedList[numBuckets];
+        entries = (Entry[]) new Object[numBuckets];
         for (int i = 0; i < numBuckets; i++) {
-            ll[i] = new LinkedList<V>();
+            entries[i] = new Entry();
         }
     }
     public MyHashMap(int initialSize, double loadFactor) {
         numBuckets = initialSize;
         this.loadFactor = loadFactor;
-        ll = (LinkedList<V>[]) new LinkedList[numBuckets];
+        entries = (Entry[]) new Object[numBuckets];
         for (int i = 0; i < numBuckets; i++) {
-            ll[i] = new LinkedList<V>();
+            entries[i] = new Entry();
         }
     }
 
@@ -79,7 +87,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     @Override
     public V get(K key) {
         int i = key.hashCode();
-        return ll[i].get(key);
+        return entries[i].get(key);
     }
 
     private void resize(int chains) {
