@@ -123,7 +123,11 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         int i = key.hashCode();
         if (!containsKey(key)) {
             size++;
-            entries[i].put(key, val);
+            entries[i] = new Entry(key, val, entries[i]);
+        }
+        else {
+            Entry lookup = entries[i].get(key);
+            lookup.val = val;
         }
     }
 
