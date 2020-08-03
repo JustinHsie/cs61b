@@ -7,8 +7,30 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
 
     private int numBuckets;
     private double loadFactor;
+    private int n;
     private HashSet keys;
-    private LinkedList<V>[] ll;
+    private Entry entry[];
+
+    // Entry code from Josh Hug ULLMap
+    private class Entry {
+        K key;
+        V val;
+        Entry next;
+        public Entry(K k, V v, Entry n) {
+            this.key = k;
+            this.val = v;
+            this.next = n;
+        }
+        public Entry get(K k) {
+            if (k.equals(key)) {
+                return this;
+            }
+            if (next == null) {
+                return null;
+            }
+            return next.get(k);
+        }
+    }
 
     public MyHashMap() {
         numBuckets = 16;
@@ -55,11 +77,22 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * map contains no mapping for the key.
      */
     @Override
-    public V get(K key) {return null;}
+    public V get(K key) {
+        int i = key.hashCode();
+        return ll[i].get(key);
+    }
 
+    private void resize(int chains) {
+        MyHashMap<K, V> temp = new MyHashMap<K, V>(chains);
+        for (int i = 0; i < numBuckets; i++) {
+            for ()
+        }
+    }
     /** Returns the number of key-value mappings in this map. */
     @Override
-    public int size() {return 0;}
+    public int size() {
+        return n;
+    }
 
     /**
      * Associates the specified value with the specified key in this map.
@@ -67,11 +100,13 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * the old value is replaced.
      */
     @Override
-    public void put(K key, V value) {}
+    public void put(K key, V value) {
+
+    }
 
     /** Returns a Set view of the keys contained in this map. */
     @Override
-    public Set<K> keySet() {return null;}
+    public Set<K> keySet() {return keys;}
 
     /**
      * Removes the mapping for the specified key from this map if present.
