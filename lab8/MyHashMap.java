@@ -7,9 +7,8 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     private int numBuckets;
     private double loadFactor;
     private int size;
-    private HashSet keys;
+    private HashSet<K> keySet;
     private Entry[] entries;
-    private Entry list;
 
     // Entry code from Josh Hug ULLMap
     private class Entry {
@@ -42,6 +41,8 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     public MyHashMap() {
         numBuckets = 16;
         loadFactor = 0.75;
+        size = 0;
+        keySet = null;
         entries = (Entry[]) new Object[numBuckets];
         for (int i = 0; i < numBuckets; i++) {
             entries[i] = new Entry();
@@ -50,6 +51,8 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     public MyHashMap(int initialSize) {
         numBuckets = initialSize;
         loadFactor = 0.75;
+        size = 0;
+        keySet = null;
         entries = (Entry[]) new Object[numBuckets];
         for (int i = 0; i < numBuckets; i++) {
             entries[i] = new Entry();
@@ -58,6 +61,8 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     public MyHashMap(int initialSize, double loadFactor) {
         numBuckets = initialSize;
         this.loadFactor = loadFactor;
+        size = 0;
+        keySet = null;
         entries = (Entry[]) new Object[numBuckets];
         for (int i = 0; i < numBuckets; i++) {
             entries[i] = new Entry();
@@ -66,7 +71,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
 
     @Override
     public Iterator<K> iterator() {
-        return null;
+        return keySet.iterator();
     }
 
     /** Removes all of the mappings from this map. */
@@ -81,7 +86,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     /** Returns true if this map contains a mapping for the specified key. */
     @Override
     public boolean containsKey(K key) {
-        return keys.contains(key);
+        return keySet.contains(key);
     }
 
     /**
@@ -101,8 +106,14 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     private void resize(int buckets) {
         MyHashMap<K, V> temp = new MyHashMap<K, V>(buckets);
         for (int i = 0; i < numBuckets; i++) {
-            for ()
+            for (K key : keySet) {
+                int j = key.hashCode();
+                temp.put(key, entries[j].get(key).val);
+            }
         }
+        this.numBuckets = temp.numBuckets;
+        this.size = temp.size;
+        this.entries = temp.entries;
     }
     /** Returns the number of key-value mappings in this map. */
     @Override
@@ -124,6 +135,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         if (!containsKey(key)) {
             size++;
             entries[i] = new Entry(key, val, entries[i]);
+            keySet.add(key);
         }
         else {
             Entry lookup = entries[i].get(key);
@@ -133,7 +145,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
 
     /** Returns a Set view of the keys contained in this map. */
     @Override
-    public Set<K> keySet() {return keys;}
+    public Set<K> keySet() {return keySet;}
 
     /**
      * Removes the mapping for the specified key from this map if present.
