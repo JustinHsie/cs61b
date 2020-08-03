@@ -1,13 +1,12 @@
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Set;
 
 public class MyHashMap<K, V> implements Map61B<K, V> {
 
     private int numBuckets;
     private double loadFactor;
-    private int n;
+    private int size;
     private HashSet keys;
     private Entry[] entries;
     private Entry list;
@@ -72,7 +71,12 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
 
     /** Removes all of the mappings from this map. */
     @Override
-    public void clear() {}
+    public void clear() {
+        size = 0;
+        for (int i = 0; i < numBuckets; i++) {
+            entries[i] = new Entry();
+        }
+    }
 
     /** Returns true if this map contains a mapping for the specified key. */
     @Override
