@@ -80,12 +80,17 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      */
     @Override
     public V get(K key) {
-        int i = key.hashCode();
-        Entry lookup = entries[i].get(key);
-        if (lookup == null) {
-            return null;
+        Entry<K, V> e = find(key, bins.get(key.hashCode()));
+        return (e == null) ? null : e.value;
+    }
+
+    private Entry<K, V> find (K key, Entry<K, V> bin) {
+        for (Entry<K, V> e = bin; e != null; e = e.next) {
+            if (key.equals(e.key)) {
+                return e;
+            }
         }
-        return lookup.val;
+        return null;
     }
 
     private void resize(int buckets) {
