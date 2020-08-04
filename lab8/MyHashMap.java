@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.*;
 
 // Code from textbook
 public class MyHashMap<K, V> implements Map61B<K, V> {
@@ -16,22 +13,25 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         numBuckets = 16;
         loadFactor = 0.75;
         size = 0;
-        keySet = null;
+        keySet = new HashSet<K>();
         bins = new ArrayList<Entry<K, V>>(numBuckets);
+        bins.addAll (Collections.nCopies(numBuckets, null));
     }
     public MyHashMap(int initialSize) {
         numBuckets = initialSize;
         loadFactor = 0.75;
         size = 0;
-        keySet = null;
-        bins= new ArrayList<Entry<K, V>>(numBuckets);
+        keySet = new HashSet<K>();
+        bins = new ArrayList<Entry<K, V>>(numBuckets);
+        bins.addAll (Collections.nCopies(numBuckets, null));
     }
     public MyHashMap(int initialSize, double loadFactor) {
         numBuckets = initialSize;
         this.loadFactor = loadFactor;
         size = 0;
-        keySet = null;
+        keySet = new HashSet<K>();
         bins = new ArrayList<Entry<K, V>>(numBuckets);
+        bins.addAll (Collections.nCopies(numBuckets, null));
     }
 
     private class Entry<Key, Val> {
@@ -64,6 +64,8 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     public void clear() {
         size = 0;
         keySet.clear();
+        bins = new ArrayList<Entry<K, V>>(numBuckets);
+        bins.addAll (Collections.nCopies(numBuckets, null));
     }
 
     /** Returns true if this map contains a mapping for the specified key. */
@@ -78,7 +80,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      */
     @Override
     public V get(K key) {
-        Entry<K, V> e = find(key, bins.get(key.hashCode() % numBuckets));
+        Entry<K, V> e = find(key, bins.get((0x7fffffff & key.hashCode()) % bins.size()));
         return (e == null) ? null : e.value;
     }
 
@@ -95,7 +97,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     private void resize() {
         MyHashMap<K, V> temp = new MyHashMap<>(bins.size() * 2);
         for (int i = 0; i < numBuckets; i++) {
-            for (Entry<K, V> e = bins.get(0); e != null; e = e.next) {
+            for (Entry<K, V> e = bins.get(i); e != null; e = e.next) {
                 temp.put(e.key, e.value);
             }
         }
@@ -116,7 +118,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      */
     @Override
     public void put(K key, V value) {
-        int h = key.hashCode() % numBuckets;
+        int h = (0x7fffffff & key.hashCode()) % bins.size();
         Entry<K, V> e = find(key, bins.get(h));
         if (e == null) {
             bins.set(h, new Entry<K, V> (key, value, bins.get(h)));
