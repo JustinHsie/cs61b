@@ -3,55 +3,55 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+// Code from textbook
 public class MyHashMap<K, V> implements Map61B<K, V> {
 
     private int numBuckets;
     private double loadFactor;
     private int size;
     private HashSet<K> keySet;
-    private ArrayList entries;
+    private ArrayList<Entry<K, V>> bins;
 
     public MyHashMap() {
         numBuckets = 16;
         loadFactor = 0.75;
         size = 0;
         keySet = null;
-        entries = new ArrayList<Entry>(numBuckets);
+        bins = new ArrayList<Entry<K, V>>(numBuckets);
     }
     public MyHashMap(int initialSize) {
         numBuckets = initialSize;
         loadFactor = 0.75;
         size = 0;
         keySet = null;
-        entries = new ArrayList<Entry>(numBuckets);
+        bins= new ArrayList<Entry<K, V>>(numBuckets);
     }
     public MyHashMap(int initialSize, double loadFactor) {
         numBuckets = initialSize;
         this.loadFactor = loadFactor;
         size = 0;
         keySet = null;
-        entries = new ArrayList<Entry>(numBuckets);
+        bins = new ArrayList<Entry<K, V>>(numBuckets);
     }
 
-    // Entry code from Josh Hug ULLMap
-    private class Entry {
-        K key;
-        V value;
-        Entry next;
+    private class Entry<Key, Val> {
+        Key key;
+        Val value;
+        Entry<Key, Val> next;
 
-        Entry(K k, V v, Entry n) {
+        Entry(Key k, Val v, Entry<Key, Val> n) {
             this.key = k;
             this.value = v;
             this.next = n;
         }
-        public K getKey() {
+        public Key getKey() {
             return key;
         }
-        public V getValue() {
+        public Val getValue() {
             return value;
         }
-        public V setValue(V x) {
-            V old = value;
+        public Val setValue(Val x) {
+            Val old = value;
             value = x;
             return old;
         }
@@ -65,10 +65,7 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     @Override
     public void clear() {
         size = 0;
-        for (int i = 0; i < numBuckets; i++) {
-            entries[i] = null;
-        }
-        keySet = null;
+        keySet.clear();
     }
 
     /** Returns true if this map contains a mapping for the specified key. */
