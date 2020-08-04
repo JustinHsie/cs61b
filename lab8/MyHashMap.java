@@ -80,10 +80,11 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      */
     @Override
     public V get(K key) {
-        Entry<K, V> e = find(key, bins.get(key.hashCode()));
+        Entry<K, V> e = find(key, bins.get(key.hashCode() % numBuckets));
         return (e == null) ? null : e.value;
     }
 
+    // Returns entry in its bin list whose key matches
     private Entry<K, V> find (K key, Entry<K, V> bin) {
         for (Entry<K, V> e = bin; e != null; e = e.next) {
             if (key.equals(e.key)) {
@@ -93,8 +94,8 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         return null;
     }
 
-    private void resize(int buckets) {
-        MyHashMap<K, V> temp = new MyHashMap<K, V>(buckets);
+    private void resize() {
+        MyHashMap<K, V> temp = new MyHashMap<>(buckets);
         for (int i = 0; i < numBuckets; i++) {
             for (K key : keySet) {
                 int j = key.hashCode();
@@ -117,19 +118,17 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
      * the old value is replaced.
      */
     @Override
-    public void put(K key, V val) {
-        if ((double) size / numBuckets > loadFactor) {
-            resize(2 * numBuckets);
-        }
-        int i = key.hashCode();
-        if (!containsKey(key)) {
-            size++;
-            entries[i] = new Entry(key, val, entries[i]);
+    public void put(K key, V value) {
+        int h = key.hashCode() % numBuckets;
+        Entry<K, V> e = find(key, bins.get(h));
+        if (e == null) {
+            bins.set(h, new Entry<K, V> (key, value, bins.get(h)));
             keySet.add(key);
-        }
-        else {
-            Entry lookup = entries[i].get(key);
-            lookup.val = val;
+            size += 1;
+            if (size > bins.size() * loadFactor) {
+                resize();
+            }
+            e.setValue(value);
         }
     }
 
