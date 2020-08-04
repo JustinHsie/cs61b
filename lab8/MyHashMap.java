@@ -50,10 +50,8 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
         public Val getValue() {
             return value;
         }
-        public Val setValue(Val x) {
-            Val old = value;
+        public void setValue(Val x) {
             value = x;
-            return old;
         }
     }
     @Override
@@ -95,16 +93,15 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     }
 
     private void resize() {
-        MyHashMap<K, V> temp = new MyHashMap<>(buckets);
+        MyHashMap<K, V> temp = new MyHashMap<>(bins.size() * 2);
         for (int i = 0; i < numBuckets; i++) {
-            for (K key : keySet) {
-                int j = key.hashCode();
-                temp.put(key, entries[j].get(key).val);
+            for (Entry<K, V> e = bins.get(0); e != null; e = e.next) {
+                temp.put(e.key, e.value);
             }
         }
         this.numBuckets = temp.numBuckets;
         this.size = temp.size;
-        this.entries = temp.entries;
+        this.bins = temp.bins;
     }
     /** Returns the number of key-value mappings in this map. */
     @Override
@@ -128,6 +125,8 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
             if (size > bins.size() * loadFactor) {
                 resize();
             }
+        }
+        else {
             e.setValue(value);
         }
     }
