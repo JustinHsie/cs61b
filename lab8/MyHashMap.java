@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -8,67 +9,53 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     private double loadFactor;
     private int size;
     private HashSet<K> keySet;
-    private Entry[] entries;
-
-    // Entry code from Josh Hug ULLMap
-    private class Entry {
-        K key;
-        V val;
-        Entry next;
-
-        Entry() {
-            key = null;
-            val = null;
-            next = null;
-        }
-
-        Entry(K k, V v, Entry n) {
-            this.key = k;
-            this.val = v;
-            this.next = n;
-        }
-        Entry get(K k) {
-            if (k.equals(key)) {
-                return this;
-            }
-            if (next == null) {
-                return null;
-            }
-            return next.get(k);
-        }
-    }
+    private ArrayList entries;
 
     public MyHashMap() {
         numBuckets = 16;
         loadFactor = 0.75;
         size = 0;
         keySet = null;
-        entries = (Entry[]) new Object[numBuckets];
-        for (int i = 0; i < numBuckets; i++) {
-            entries[i] = new Entry();
-        }
+        entries = new ArrayList<Entry>(numBuckets);
     }
     public MyHashMap(int initialSize) {
         numBuckets = initialSize;
         loadFactor = 0.75;
         size = 0;
         keySet = null;
-        entries = (Entry[]) new Object[numBuckets];
-        for (int i = 0; i < numBuckets; i++) {
-            entries[i] = new Entry();
-        }
+        entries = new ArrayList<Entry>(numBuckets);
     }
     public MyHashMap(int initialSize, double loadFactor) {
         numBuckets = initialSize;
         this.loadFactor = loadFactor;
         size = 0;
         keySet = null;
-        entries = (Entry[]) new Object[numBuckets];
-        for (int i = 0; i < numBuckets; i++) {
-            entries[i] = new Entry();
-        }
+        entries = new ArrayList<Entry>(numBuckets);
     }
 
+    // Entry code from Josh Hug ULLMap
+    private class Entry {
+        K key;
+        V value;
+        Entry next;
+
+        Entry(K k, V v, Entry n) {
+            this.key = k;
+            this.value = v;
+            this.next = n;
+        }
+        public K getKey() {
+            return key;
+        }
+        public V getValue() {
+            return value;
+        }
+        public V setValue(V x) {
+            V old = value;
+            value = x;
+            return old;
+        }
+    }
     @Override
     public Iterator<K> iterator() {
         return keySet.iterator();
@@ -79,8 +66,9 @@ public class MyHashMap<K, V> implements Map61B<K, V> {
     public void clear() {
         size = 0;
         for (int i = 0; i < numBuckets; i++) {
-            entries[i] = new Entry();
+            entries[i] = null;
         }
+        keySet = null;
     }
 
     /** Returns true if this map contains a mapping for the specified key. */
