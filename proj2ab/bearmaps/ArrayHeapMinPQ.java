@@ -41,7 +41,9 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
 
     /* Returns the number of items in the PQ. */
     @Override
-    public int size() {return 0;}
+    public int size() {
+        return numItems;
+    }
 
     /* Changes the priority of the given item. Throws NoSuchElementException if the item
      * doesn't exist. */
