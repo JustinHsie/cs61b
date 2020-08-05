@@ -1,5 +1,7 @@
 package bearmaps;
 
+import java.util.NoSuchElementException;
+
 public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     private ArrayHeapMinPQ.PriorityNode<T>[] minHeap; // store items at indices 1 to n
     private int numItems; // number of items on priority queue
@@ -81,7 +83,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
             resize(2 * minHeap.length);
         }
         minHeap[++numItems] = new PriorityNode<>(item, priority);
-        swim(minHeap[numItems]);
+        //swim(minHeap[numItems]);
     }
 
     /* Returns true if the PQ contains the given item. */
@@ -91,7 +93,12 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
 
     /* Returns the minimum item. Throws NoSuchElementException if the PQ is empty. */
     @Override
-    public T getSmallest() {return null;}
+    public T getSmallest() {
+        if (size() == 0) {
+            throw new NoSuchElementException("Priority Queue is empty");
+        }
+        return minHeap[1].item;
+    }
 
     /* Removes and returns the minimum item. Throws NoSuchElementException if the PQ is empty. */
     @Override
