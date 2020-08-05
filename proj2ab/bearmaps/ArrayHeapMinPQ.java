@@ -21,6 +21,54 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         this(1);
     }
 
+    /**
+     * @source Josh Hug
+     */
+    private class PriorityNode implements Comparable<ArrayHeapMinPQ.PriorityNode> {
+        private T item;
+        private double priority;
+
+        PriorityNode(T e, double p) {
+            this.item = e;
+            this.priority = p;
+        }
+
+        T getItem() {
+            return item;
+        }
+
+        double getPriority() {
+            return priority;
+        }
+
+        void setPriority(double priority) {
+            this.priority = priority;
+        }
+
+        @Override
+        public int compareTo(ArrayHeapMinPQ.PriorityNode other) {
+            if (other == null) {
+                return -1;
+            }
+            return Double.compare(this.getPriority(), other.getPriority());
+        }
+
+        @Override
+        @SuppressWarnings("unchecked")
+        public boolean equals(Object o) {
+            if (o == null || o.getClass() != this.getClass()) {
+                return false;
+            } else {
+                return ((ArrayHeapMinPQ.PriorityNode) o).getItem().equals(getItem());
+            }
+        }
+
+        @Override
+        public int hashCode() {
+            return item.hashCode();
+        }
+    }
+
     /* Adds an item with the given priority value. Throws an
      * IllegalArgumentException if item is already present.
      * You may assume that item is never null. */
@@ -30,6 +78,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     /* Returns true if the PQ contains the given item. */
     @Override
     public boolean contains(T item) {return false;}
+
 
     /* Returns the minimum item. Throws NoSuchElementException if the PQ is empty. */
     @Override
