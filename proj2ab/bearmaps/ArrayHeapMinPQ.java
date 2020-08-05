@@ -1,6 +1,25 @@
 package bearmaps;
 
 public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
+    private T[] minHeap; // store items at indices 1 to n
+    private int numItems; // number of items on priority queue
+
+    /**
+     * Initializes an empty priority queue with given initial capacity
+     *
+     * @param initCapacity the initial capacity of this priority queue
+     */
+    public ArrayHeapMinPQ(int initCapacity) {
+        minHeap = (T[]) new Object[initCapacity + 1];
+        numItems = 0;
+    }
+
+    /**
+     * Initializes an empty priority queue
+     */
+    public ArrayHeapMinPQ() {
+        this(1);
+    }
 
     /* Adds an item with the given priority value. Throws an
      * IllegalArgumentException if item is already present.
