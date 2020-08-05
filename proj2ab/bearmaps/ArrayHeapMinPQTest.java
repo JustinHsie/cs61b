@@ -11,4 +11,8 @@ public class ArrayHeapMinPQTest {
         ArrayHeapMinPQ<Integer> b = new ArrayHeapMinPQ<>(10);
         assertEquals(0, b.size());
     }
+
+    public static void main(String[] args) {
+        jh61b.junit.TestRunner.runTests(ArrayHeapMinPQTest.class);
+    }
 }

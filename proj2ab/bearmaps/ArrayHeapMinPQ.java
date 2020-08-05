@@ -1,7 +1,7 @@
 package bearmaps;
 
 public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
-    private T[] minHeap; // store items at indices 1 to n
+    private ArrayHeapMinPQ.PriorityNode<T>[] minHeap; // store items at indices 1 to n
     private int numItems; // number of items on priority queue
 
     /**
@@ -10,7 +10,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
      * @param initCapacity the initial capacity of this priority queue
      */
     public ArrayHeapMinPQ(int initCapacity) {
-        minHeap = (T[]) new Object[initCapacity + 1];
+        minHeap = (PriorityNode<T>[]) new PriorityNode[initCapacity + 1];
         numItems = 0;
     }
 
@@ -24,7 +24,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     /**
      * @source Josh Hug
      */
-    private class PriorityNode implements Comparable<ArrayHeapMinPQ.PriorityNode> {
+    private static class PriorityNode<T> implements Comparable<ArrayHeapMinPQ.PriorityNode> {
         private T item;
         private double priority;
 
@@ -73,7 +73,16 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
      * IllegalArgumentException if item is already present.
      * You may assume that item is never null. */
     @Override
-    public void add(T item, double priority) {}
+    public void add(T item, double priority) {
+        if (contains(item)) {
+            throw new IllegalArgumentException("Item already present");
+        }
+        else if (numItems == minHeap.length - 1) {
+            resize(2 * minHeap.length);
+        }
+        minHeap[++numItems] = new PriorityNode<>(item, priority);
+        swim(minHeap[numItems]);
+    }
 
     /* Returns true if the PQ contains the given item. */
     @Override
