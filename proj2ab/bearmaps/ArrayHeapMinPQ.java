@@ -103,6 +103,14 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         return numItems;
     }
 
+    private void resize(int capacity) {
+        ArrayHeapMinPQ.PriorityNode<T>[] temp = (PriorityNode<T>[]) new PriorityNode[capacity];
+        for (int i = 0; i < numItems; i++) {
+            temp[i] = minHeap[i];
+        }
+        minHeap = temp;
+    }
+
     /* Changes the priority of the given item. Throws NoSuchElementException if the item
      * doesn't exist. */
     @Override
