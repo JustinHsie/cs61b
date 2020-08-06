@@ -79,16 +79,32 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         if (contains(item)) {
             throw new IllegalArgumentException("Item already present");
         }
+        // Resize if necessary
         else if (numItems == minHeap.length - 1) {
             resize(2 * minHeap.length);
         }
         minHeap[++numItems] = new PriorityNode<>(item, priority);
-        //swim(minHeap[numItems]);
+        swim(minHeap[numItems].priority);
     }
+
+    private void swim(double k) {
+        while (k > 1 && greater(k/2, k)) {
+            exch(k, k/2);
+            k = k/2;
+        }
+    }
+
+    private void sink(int k) {
+
+    }
+
 
     /* Returns true if the PQ contains the given item. */
     @Override
-    public boolean contains(T item) {return false;}
+    public boolean contains(T item) {
+        // TODO
+        return false;
+    }
 
 
     /* Returns the minimum item. Throws NoSuchElementException if the PQ is empty. */
