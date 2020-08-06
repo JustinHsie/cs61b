@@ -28,6 +28,25 @@ public class ArrayHeapMinPQTest {
     }
 
     @Test
+    public void testGetSmallest() {
+        ArrayHeapMinPQ<Integer> a = new ArrayHeapMinPQ<>();
+        a.add(3, 3);
+        a.add(2, 2);
+        a.add(4, 4);
+        assertEquals(2, (int) a.getSmallest());
+    }
+
+    @Test
+    public void testSize() {
+        ArrayHeapMinPQ<Integer> a = new ArrayHeapMinPQ<>();
+        assertEquals(0, a.size());
+        for (int i = 0; i < 365; i++) {
+            a.add(i, i);
+        }
+        assertEquals(365, a.size());
+    }
+
+    @Test
     public void testRemoveSmallest() {
         ArrayHeapMinPQ<Character> a = new ArrayHeapMinPQ<>();
         a.add('a', 1);
@@ -46,13 +65,9 @@ public class ArrayHeapMinPQTest {
     public void testContains() {
         ArrayHeapMinPQ<String> a = new ArrayHeapMinPQ<>();
         a.add("a", 1);
-        a.add("b", 2);
-        a.add("c", 3);
-
         assertTrue(a.contains("a"));
 
         a.removeSmallest();
-
         assertFalse(a.contains("a"));
     }
 
@@ -67,6 +82,10 @@ public class ArrayHeapMinPQTest {
         assertEquals("b", a.getSmallest());
         a.changePriority("c", 1);
         assertEquals("c", a.getSmallest());
+
+        a.add("d", 4);
+        a.changePriority("a", 1);
+        assertEquals("a", a.getSmallest());
     }
 
 
