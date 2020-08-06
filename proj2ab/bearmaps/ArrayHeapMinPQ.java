@@ -104,9 +104,6 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
 
     private void exch(int i, int j) {
         PriorityNode<T> swap = minHeap[i];
-        double swapPriority = minHeap[i].priority;
-        minHeap[i].setPriority(minHeap[j].priority);
-        minHeap[j].setPriority(swapPriority);
         minHeap[i] = minHeap[j];
         minHeap[j] = swap;
     }
