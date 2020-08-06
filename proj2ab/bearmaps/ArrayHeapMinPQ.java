@@ -95,7 +95,13 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     }
 
     private void sink(int k) {
-
+        while (2*k <= numItems) {
+            int j = 2*k;
+            if (j < numItems && greater(j, j+1)) j++;
+            if (!greater(k, j)) break;
+            exch(k, j);
+            k = j;
+        }
     }
 
     private boolean greater(int i, int j) {
@@ -128,7 +134,17 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
 
     /* Removes and returns the minimum item. Throws NoSuchElementException if the PQ is empty. */
     @Override
-    public T removeSmallest() {return null;}
+    public T removeSmallest() {
+        if (size() == 0) {
+            throw new NoSuchElementException("Priority Queue is empty");
+        }
+        PriorityNode<T> min = minHeap[1];
+        exch(1, numItems--);
+        sink(1);
+        minHeap[numItems + 1] = null;
+        if ((numItems > 0) && (numItems == (minHeap.length - 1) / 4)) resize(minHeap.length / 2);
+        return min.item;
+    }
 
     /* Returns the number of items in the PQ. */
     @Override
