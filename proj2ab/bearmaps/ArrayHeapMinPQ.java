@@ -1,10 +1,11 @@
 package bearmaps;
 
-import java.util.NoSuchElementException;
+import java.util.*;
 
 public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     private ArrayHeapMinPQ.PriorityNode<T>[] minHeap; // store items at indices 1 to n
     private int numItems; // number of items on priority queue
+    private HashMap<T, Double> itemSet;
 
     /**
      * Initializes an empty priority queue with given initial capacity
@@ -14,6 +15,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     public ArrayHeapMinPQ(int initCapacity) {
         minHeap = (PriorityNode<T>[]) new PriorityNode[initCapacity + 1];
         numItems = 0;
+        itemSet = new HashMap<>(numItems);
     }
 
     /**
@@ -84,6 +86,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
             resize(2 * minHeap.length);
         }
         minHeap[++numItems] = new PriorityNode<>(item, priority);
+        itemSet.put(item, priority);
         swim(numItems);
     }
 
@@ -118,8 +121,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     /* Returns true if the PQ contains the given item. */
     @Override
     public boolean contains(T item) {
-        // TODO
-        return false;
+        return itemSet.containsKey(item);
     }
 
 
@@ -139,8 +141,10 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
             throw new NoSuchElementException("Priority Queue is empty");
         }
         PriorityNode<T> min = minHeap[1];
+        itemSet.remove(min.item);
         exch(1, numItems--);
         sink(1);
+
         minHeap[numItems + 1] = null;
         if ((numItems > 0) && (numItems == (minHeap.length - 1) / 4)) resize(minHeap.length / 2);
         return min.item;
