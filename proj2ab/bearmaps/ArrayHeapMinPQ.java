@@ -167,5 +167,25 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     /* Changes the priority of the given item. Throws NoSuchElementException if the item
      * doesn't exist. */
     @Override
-    public void changePriority(T item, double priority) {}
+    public void changePriority(T item, double priority) {
+        if (!contains(item)) {
+            throw new NoSuchElementException("Item doesn't exist");
+        }
+        int index, origPriority;
+        index = origPriority = itemSet.get(item).intValue();
+        while (minHeap[index].priority == origPriority) {
+            if (minHeap[index].item.equals(item)) {
+                minHeap[index].setPriority(priority);
+                if (priority < origPriority) {
+                    swim(index);
+                }
+                else {
+                    sink(index);
+                }
+                break;
+            }
+            index++;
+        }
+        itemSet.replace(item, priority);
+    }
 }

@@ -56,6 +56,19 @@ public class ArrayHeapMinPQTest {
         assertFalse(a.contains("a"));
     }
 
+    @Test
+    public void testChangePriority() {
+        ArrayHeapMinPQ<String> a = new ArrayHeapMinPQ<>();
+        a.add("a", 1);
+        a.add("b", 2);
+        a.add("c", 3);
+
+        a.changePriority("a", 4);
+        assertEquals("b", a.getSmallest());
+        a.changePriority("c", 1);
+        assertEquals("c", a.getSmallest());
+    }
+
 
     public static void main(String[] args) {
         jh61b.junit.TestRunner.runTests(ArrayHeapMinPQTest.class);
