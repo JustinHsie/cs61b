@@ -99,7 +99,7 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     }
 
     private boolean greater(int i, int j) {
-        return (minHeap[i].compareTo(minHeap[j])) > 0;
+        return (minHeap[i].compareTo(minHeap[j])) >= 0;
     }
 
     private void exch(int i, int j) {
