@@ -84,10 +84,10 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
             resize(2 * minHeap.length);
         }
         minHeap[++numItems] = new PriorityNode<>(item, priority);
-        swim(minHeap[numItems].priority);
+        swim(numItems);
     }
 
-    private void swim(double k) {
+    private void swim(int k) {
         while (k > 1 && greater(k/2, k)) {
             exch(k, k/2);
             k = k/2;
@@ -96,6 +96,10 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
 
     private void sink(int k) {
 
+    }
+
+    private boolean greater(int i, int j) {
+        return (minHeap[i].compareTo(minHeap[j])) > 0;
     }
 
 
