@@ -70,9 +70,18 @@ public class MyTrieSet implements TrieSet61B {
             return x;
         }
         for (char c : curr.map.keySet()) {
-            x.add(prefix + c);
+            collect(prefix + c, x, curr.map.get(c));
         }
         return x;
+    }
+
+    private void collect(String s, List<String> x, Node n) {
+        if (n.isKey) {
+            x.add(s);
+        }
+        for (char c : n.map.keySet()) {
+            collect(s + c, x, n.map.get(c));
+        }
     }
 
     private Node findPrefix(String prefix) {
