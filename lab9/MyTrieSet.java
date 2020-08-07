@@ -28,8 +28,18 @@ public class MyTrieSet implements TrieSet61B {
     /** Returns true if the Trie contains KEY, false otherwise */
     @Override
     public boolean contains(String key) {
-        //TODO
-        return false;
+        if (key == null || key.length() < 1) {
+            return false;
+        }
+        Node curr = root;
+        for (int i = 0; i < key.length(); i++) {
+            char c = key.charAt(i);
+            if (!curr.map.containsKey(c)) {
+                return false;
+            }
+            curr = curr.map.get(c);
+        }
+        return curr.isKey;
     }
 
     /** Inserts string KEY into Trie */
