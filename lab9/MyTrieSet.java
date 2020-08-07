@@ -5,7 +5,7 @@ public class MyTrieSet implements TrieSet61B {
     private Node root;
 
     public MyTrieSet() {
-
+        root = new Node('j', false);
     }
     private static class Node {
         private char c;
@@ -22,7 +22,7 @@ public class MyTrieSet implements TrieSet61B {
     /** Clears all items out of Trie */
     @Override
     public void clear() {
-        //TODO
+        root = new Node('j', false);
     }
 
     /** Returns true if the Trie contains KEY, false otherwise */
