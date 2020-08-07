@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 public class MyTrieSet implements TrieSet61B {
@@ -62,9 +64,15 @@ public class MyTrieSet implements TrieSet61B {
     /** Returns a list of all words that start with PREFIX */
     @Override
     public List<String> keysWithPrefix(String prefix) {
-        List<String> x;
+        List<String> x = new ArrayList<String>();
         Node curr = findPrefix(prefix);
-        if curr null not present
+        if (curr == null) {
+            return x;
+        }
+        for (char c : curr.map.keySet()) {
+            x.add(prefix + c);
+        }
+        return x;
     }
 
     private Node findPrefix(String prefix) {
