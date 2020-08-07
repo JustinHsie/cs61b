@@ -62,8 +62,24 @@ public class MyTrieSet implements TrieSet61B {
     /** Returns a list of all words that start with PREFIX */
     @Override
     public List<String> keysWithPrefix(String prefix) {
-        //TODO
-        return null;
+        List<String> x;
+        Node curr = findPrefix(prefix);
+        if curr null not present
+    }
+
+    private Node findPrefix(String prefix) {
+        if (prefix == null || prefix.length() < 1) {
+            return null;
+        }
+        Node curr = root;
+        for (int i = 0; i < prefix.length(); i++) {
+            char c = prefix.charAt(i);
+            if (!curr.map.containsKey(c)) {
+                return null;
+            }
+            curr = curr.map.get(c);
+        }
+        return curr;
     }
 
     /** Returns the longest prefix of KEY that exists in the Trie
