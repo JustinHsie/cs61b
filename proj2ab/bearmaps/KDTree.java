@@ -50,10 +50,18 @@ public class KDTree {
     }
 
     public Point nearest(double x, double y) {
-        return null;
+        Point goal = new Point(x, y);
+        Node best = nearest(root, goal, root);
+        return best.xy;
     }
 
     private Node nearest(Node n, Point goal, Node best) {
-        return null;
+        if (n == null) return best;
+        if (Point.distance(n.xy, goal) < Point.distance(best.xy, goal)) {
+            best = n;
+        }
+        best = nearest(n.left, goal, best);
+        best = nearest(n.right, goal, best);
+        return best;
     }
 }
