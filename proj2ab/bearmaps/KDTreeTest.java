@@ -1,5 +1,6 @@
 package bearmaps;
 
+import edu.princeton.cs.algs4.Stopwatch;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -48,5 +49,53 @@ public class KDTreeTest {
 
         assertEquals(nearestNaive, nearestKD);
 
+    }
+
+    @Test
+    public void testNearestTiming() {
+        Random r = new Random(123);
+        List<Point> list = new ArrayList<>();
+        List<Point> nearestNaive = new ArrayList<>();
+        List<Point> nearestKD = new ArrayList<>();
+
+        // Naive
+        Stopwatch sw = new Stopwatch();
+        for (int i = 0; i < 100000; i++) {
+            double x = r.nextDouble();
+            double y = r.nextDouble();
+
+            list.add(new Point(x, y));
+        }
+
+        NaivePointSet naive = new NaivePointSet(list);
+
+        for (int j = 0; j < 10000; j++) {
+            double x = r.nextDouble();
+            double y = r.nextDouble();
+
+            nearestNaive.add(naive.nearest(x, y));
+        }
+
+        System.out.println("Naive - Total time elapsed: " + sw.elapsedTime() +  " seconds.");
+
+        // KD
+        Stopwatch sw2 = new Stopwatch();
+        for (int i = 0; i < 100000; i++) {
+            double x = r.nextDouble();
+            double y = r.nextDouble();
+
+            list.add(new Point(x, y));
+        }
+
+        KDTree kd = new KDTree(list);
+
+        for (int j = 0; j < 10000; j++) {
+            double x = r.nextDouble();
+            double y = r.nextDouble();
+
+            nearestKD.add(kd.nearest(x, y));
+        }
+
+        System.out.println("KDTree - Total time elapsed: " + sw2.elapsedTime() +  " seconds.");
     }
 }
