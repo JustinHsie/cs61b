@@ -12,17 +12,16 @@ public class NaivePointSet implements PointSet {
     }
     public Point nearest(double x, double y) {
         Point o = new Point(x, y);
-        double bestDist = Double.POSITIVE_INFINITY;
-        Point bestPoint = null;
+        Point best = list.get(0);
 
         for (Point point : list) {
-            double dist = Math.sqrt(Point.distance(point, o));
-            if (dist < bestDist) {
-                bestDist = dist;
-                bestPoint = point;
+            double distNew = Math.sqrt(Point.distance(point, o));
+            double distBest = Math.sqrt(Point.distance(best, o));
+            if (distNew < distBest) {
+                best = point;
             }
         }
-        return bestPoint;
+        return best;
     }
 
 
