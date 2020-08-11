@@ -76,13 +76,25 @@ public class KDTree {
         }
 
         best = nearest(goodSide, goal, best);
-        if (!prune()) {
+        if (!prune(n, goal, best)) {
             best = nearest(badSide, goal, best);
         }
         return best;
     }
 
-
+    private boolean prune(Node n, Point goal, Node best) {
+        Point bestHyp;
+        if (n.depth % 2 == 0) {
+            bestHyp = new Point(n.xy.getX(), goal.getY());
+            double dist = Point.distance(bestHyp, goal);
+            return dist > Point.distance(best.xy, goal);
+        }
+        else {
+            bestHyp = new Point(goal.getX(), n.xy.getY());
+            double dist = Point.distance(bestHyp, goal);
+            return dist > Point.distance(best.xy, goal);
+        }
+    }
 
     private int compareToGoal(Point goal, Node n) {
         if (n.depth % 2 == 0) {
