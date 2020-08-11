@@ -52,15 +52,14 @@ public class KDTreeTest {
     }
 
     @Test
-    public void testNearestTiming() {
+    public void testNaiveTiming() {
         Random r = new Random(123);
         List<Point> list = new ArrayList<>();
         List<Point> nearestNaive = new ArrayList<>();
-        List<Point> nearestKD = new ArrayList<>();
 
         // Naive
         Stopwatch sw = new Stopwatch();
-        for (int i = 0; i < 100000; i++) {
+        for (int i = 0; i < 200000; i++) {
             double x = r.nextDouble();
             double y = r.nextDouble();
 
@@ -69,18 +68,25 @@ public class KDTreeTest {
 
         NaivePointSet naive = new NaivePointSet(list);
 
-        for (int j = 0; j < 10000; j++) {
+        for (int j = 0; j < 20000; j++) {
             double x = r.nextDouble();
             double y = r.nextDouble();
 
             nearestNaive.add(naive.nearest(x, y));
         }
 
-        System.out.println("Naive - Total time elapsed: " + sw.elapsedTime() +  " seconds.");
+        System.out.println("Naive - Total time elapsed: " + sw.elapsedTime() + " seconds.");
+    }
+
+    @Test
+    public void testKDTreeTiming() {
+        Random r = new Random(123);
+        List<Point> list = new ArrayList<>();
+        List<Point> nearestKD = new ArrayList<>();
 
         // KD
         Stopwatch sw2 = new Stopwatch();
-        for (int i = 0; i < 100000; i++) {
+        for (int i = 0; i < 200000; i++) {
             double x = r.nextDouble();
             double y = r.nextDouble();
 
@@ -89,7 +95,7 @@ public class KDTreeTest {
 
         KDTree kd = new KDTree(list);
 
-        for (int j = 0; j < 10000; j++) {
+        for (int j = 0; j < 20000; j++) {
             double x = r.nextDouble();
             double y = r.nextDouble();
 
