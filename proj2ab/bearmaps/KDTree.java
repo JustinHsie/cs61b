@@ -3,6 +3,7 @@ package bearmaps;
 import java.util.HashSet;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class KDTree {
     private HashSet<Point> points;
@@ -19,7 +20,7 @@ public class KDTree {
 
     private Node put(Node node, Point xy) {
         if (node == null) {
-            return new Node(xy);
+            return new Node(xy, depth);
         }
 
         int cmp;
@@ -43,9 +44,11 @@ public class KDTree {
     private class Node {
         Point xy;
         Node left, right;
+        int depth;
 
-        public Node(Point p) {
+        public Node(Point p, int d) {
             xy = p;
+            depth = d;
         }
     }
 
@@ -60,8 +63,31 @@ public class KDTree {
         if (Point.distance(n.xy, goal) < Point.distance(best.xy, goal)) {
             best = n;
         }
-        best = nearest(n.left, goal, best);
-        best = nearest(n.right, goal, best);
+
+        Node goodSide;
+        Node badSide;
+        if (compareToGoal(goal, n) < 0) {
+            goodSide = n.left;
+            badSide = n.right;
+        }
+        else {
+            goodSide = n.right;
+            badSide = n.left;
+        }
+
+        best = nearest(goodSide, goal, best);
+        if (!prune()) {
+            best = nearest(badSide, goal, best);
+        }
         return best;
+    }
+
+
+
+    private int compareToGoal(Point goal, Node n) {
+        if (n.depth % 2 == 0) {
+            return Double.compare(goal.getX(), n.xy.getX());
+        }
+        return Double.compare(goal.getY(), n.xy.getY());
     }
 }
