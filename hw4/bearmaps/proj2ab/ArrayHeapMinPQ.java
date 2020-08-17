@@ -5,7 +5,7 @@ import java.util.*;
 public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
     private ArrayHeapMinPQ.PriorityNode<T>[] minHeap; // store items at indices 1 to n
     private int numItems; // number of items on priority queue
-    private HashMap<T, Double> itemSet;
+    private HashMap<T, Double> itemSet; // store item and priority
 
     /**
      * Initializes an empty priority queue with given initial capacity
@@ -173,9 +173,10 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         }
         int index, origPriority;
         index = origPriority = itemSet.get(item).intValue();
-        while (minHeap[index].priority == origPriority) {
-            if (minHeap[index].item.equals(item)) {
-                minHeap[index].setPriority(priority);
+        // Checks all tied priorities in minHeap
+        for (int i = 1; i < minHeap.length - 1; i++) {
+            if (minHeap[i].item.equals(item)) {
+                minHeap[i].setPriority(priority);
                 if (priority < origPriority) {
                     swim(index);
                 }
@@ -184,7 +185,6 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
                 }
                 break;
             }
-            index++;
         }
         itemSet.replace(item, priority);
     }
