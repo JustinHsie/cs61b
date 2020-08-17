@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import bearmaps.proj2ab.ArrayHeapMinPQ;
+import bearmaps.proj2ab.DoubleMapPQ;
 import bearmaps.proj2ab.ExtrinsicMinPQ;
 import edu.princeton.cs.algs4.Stopwatch;
 
@@ -17,6 +18,7 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
     private HashMap<Vertex, Double> distTo;
     private HashMap<Vertex, WeightedEdge<Vertex>> edgeTo;
     private AStarGraph<Vertex> G;
+    private Vertex start;
     private Vertex goal;
 
     public AStarSolver(AStarGraph<Vertex> input, Vertex start, Vertex end, double timeout) {
@@ -27,6 +29,7 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
         solution = new ArrayList<>();
         solutionWeight = 0.0;
         G = input;
+        this.start = start;
         goal = end;
 
         PQ.add(start, G.estimatedDistanceToGoal(start, end));
@@ -34,18 +37,17 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
         edgeTo.put(start, null);
 
         while(true) {
-            Vertex p = PQ.removeSmallest();
-            numStatesExplored++;
-            timeSpent = sw.elapsedTime();
-            if (p.equals(end)) {
-                outcome = SolverOutcome.SOLVED;
-                solution(p);
-                return;
-            }
             if (PQ.size() == 0) {
                 outcome = SolverOutcome.UNSOLVABLE;
                 solution.clear();
                 solutionWeight = 0.0;
+                return;
+            }
+            Vertex p = PQ.removeSmallest();
+            timeSpent = sw.elapsedTime();
+            if (p.equals(end)) {
+                outcome = SolverOutcome.SOLVED;
+                solution(p);
                 return;
             }
             if (timeSpent >= timeout) {
@@ -57,11 +59,11 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
 
             List<WeightedEdge<Vertex>> neighborEdges = input.neighbors(p);
             for (WeightedEdge<Vertex> e : neighborEdges) {
-                distTo.putIfAbsent(e.from(), Double.POSITIVE_INFINITY);
                 distTo.putIfAbsent(e.to(), Double.POSITIVE_INFINITY);
+                edgeTo.putIfAbsent(e.to(), e);
                 relax(e);
-                edgeTo.put(e.to(), e);
             }
+            numStatesExplored++;
         }
     }
 
@@ -82,12 +84,13 @@ public class AStarSolver<Vertex> implements ShortestPathsSolver<Vertex> {
     }
 
     private void solution(Vertex p) {
-        if (edgeTo.get(p).from() != null) {
+        if (p.equals(start)) {
+            solution.add(start);
             return;
         }
+        solution(edgeTo.get(p).from());
         solution.add(p);
         solutionWeight += edgeTo.get(p).weight();
-        solution(edgeTo.get(p).from());
     }
 
     @Override
