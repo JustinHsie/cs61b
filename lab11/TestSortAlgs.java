@@ -8,7 +8,25 @@ public class TestSortAlgs {
 
     @Test
     public void testQuickSort() {
+        Queue<String> stringQueue = new Queue<String>();
+        stringQueue.enqueue("Joe");
+        stringQueue.enqueue("Omar");
+        stringQueue.enqueue("Itai");
+        stringQueue.enqueue("Abby");
+        stringQueue.enqueue("Messi");
 
+        Queue<String> sortedString = QuickSort.quickSort(stringQueue);
+        assertTrue(isSorted(sortedString));
+        assertEquals(stringQueue.size(), sortedString.size());
+
+        Queue<Integer> intQueue = new Queue<Integer>();
+        Random rand = new Random(123);
+        for (int i = 0; i < 100; i++) {
+            intQueue.enqueue(rand.nextInt(50));
+        }
+        Queue<Integer> sortedInt = QuickSort.quickSort(intQueue);
+        assertTrue(isSorted(sortedInt));
+        assertEquals(intQueue.size(), sortedInt.size());
     }
 
     @Test
@@ -26,7 +44,7 @@ public class TestSortAlgs {
 
         Queue<Integer> intQueue = new Queue<Integer>();
         Random rand = new Random(123);
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 100; i++) {
             intQueue.enqueue(rand.nextInt(50));
         }
         Queue<Integer> sortedInt = MergeSort.mergeSort(intQueue);
