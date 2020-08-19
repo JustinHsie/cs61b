@@ -2,6 +2,7 @@ import edu.princeton.cs.algs4.Queue;
 
 import org.junit.Test;
 import static org.junit.Assert.*;
+import java.util.Random;
 
 public class TestSortAlgs {
 
@@ -12,15 +13,26 @@ public class TestSortAlgs {
 
     @Test
     public void testMergeSort() {
-        Queue<String> tas = new Queue<String>();
-        tas.enqueue("Joe");
-        tas.enqueue("Omar");
-        tas.enqueue("Itai");
-        tas.enqueue("Abby");
-        tas.enqueue("Messi");
+        Queue<String> stringQueue = new Queue<String>();
+        stringQueue.enqueue("Joe");
+        stringQueue.enqueue("Omar");
+        stringQueue.enqueue("Itai");
+        stringQueue.enqueue("Abby");
+        stringQueue.enqueue("Messi");
 
-        MergeSort.mergeSort(tas);
-        assertTrue(isSorted(tas));
+        Queue<String> sortedString = MergeSort.mergeSort(stringQueue);
+        assertTrue(isSorted(sortedString));
+        assertEquals(stringQueue.size(), sortedString.size());
+
+        Queue<Integer> intQueue = new Queue<Integer>();
+        Random rand = new Random(123);
+        for (int i = 0; i < 10; i++) {
+            intQueue.enqueue(rand.nextInt(50));
+        }
+        Queue<Integer> sortedInt = MergeSort.mergeSort(intQueue);
+        assertTrue(isSorted(sortedInt));
+        assertEquals(intQueue.size(), sortedInt.size());
+
 
     }
 
@@ -34,11 +46,16 @@ public class TestSortAlgs {
         if (items.size() <= 1) {
             return true;
         }
-        Item curr = items.dequeue();
+        Queue<Item> copy = new Queue<>();
+        for (Item item : items) {
+            copy.enqueue(item);
+        }
+
+        Item curr = copy.dequeue();
         Item prev = curr;
-        while (!items.isEmpty()) {
+        while (!copy.isEmpty()) {
             prev = curr;
-            curr = items.dequeue();
+            curr = copy.dequeue();
             if (curr.compareTo(prev) < 0) {
                 return false;
             }
