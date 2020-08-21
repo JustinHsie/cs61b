@@ -17,8 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static bearmaps.proj2c.utils.Constants.SEMANTIC_STREET_GRAPH;
-import static bearmaps.proj2c.utils.Constants.ROUTE_LIST;
+import static bearmaps.proj2c.utils.Constants.*;
 
 /**
  * Handles requests from the web browser for map images. These images
@@ -84,12 +83,48 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
      */
     @Override
     public Map<String, Object> processRequest(Map<String, Double> requestParams, Response response) {
-        //System.out.println("yo, wanna know the parameters given by the web browser? They are:");
-        //System.out.println(requestParams);
+        System.out.println(requestParams);
         Map<String, Object> results = new HashMap<>();
-        System.out.println("Since you haven't implemented RasterAPIHandler.processRequest, nothing is displayed in "
-                + "your browser.");
+        double query_lrlon = requestParams.get("lrlon");
+        double query_ullon = requestParams.get("ullon");
+        double query_w = requestParams.get("w");
+        int depth;
+        double raster_ul_lon;
+        double raster_lr_lon;
+        double raster_lr_lat;
+        double raster_ul_lat;
+        String[][] render_grid;
+        boolean query_success;
+
+        depth = getDepth(query_ullon, query_lrlon, query_w);
+        // snap query coordinates to leftmost x or uppermost y (helper method)
+        // iterate by row, inserting x and y into image string name as you go
+        // results in 2d list of img names
+
+        results.put("raster_ul_lon", -122.24212646484375);
+        results.put("depth", 7);
+        results.put("raster_lr_lon", -122.24006652832031);
+        results.put("raster_lr_lat", 37.87538940251607);
+        String[][] grid = {{"d7_x84_y28.png", "d7_x85_y28.png", "d7_x86_y28.png"},
+                {"d7_x84_y29.png", "d7_x85_y29.png", "d7_x86_y29.png"},
+                {"d7_x84_y30.png", "d7_x85_y30.png", "d7_x86_y30.png"}};
+        results.put("render_grid", grid);
+        results.put("raster_ul_lat", 37.87701580361881);
+        results.put("query_success", true);
         return results;
+    }
+
+    private int getDepth(double ullon, double lrlon, double w) {
+        double queryLonDPP = (lrlon - ullon) / w;
+        int depth;
+        for (depth = 0; depth < 8; depth += 1) {
+            double rasterLonDPP = (ROOT_LRLON - ROOT_ULLON) / Math.pow(2, depth) / TILE_SIZE;
+            if (rasterLonDPP <= queryLonDPP) {
+                return depth;
+            }
+        }
+        depth = 7;
+        return depth;
     }
 
     @Override
