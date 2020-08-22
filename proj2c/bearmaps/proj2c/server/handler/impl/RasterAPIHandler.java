@@ -88,6 +88,8 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         double query_lrlon = requestParams.get("lrlon");
         double query_ullon = requestParams.get("ullon");
         double query_w = requestParams.get("w");
+        double query_ullat = requestParams.get("ullat");
+        double query_lrlat = requestParams.get("lrlat");
         int depth;
         double raster_ul_lon;
         double raster_lr_lon;
@@ -97,7 +99,17 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         boolean query_success;
 
         depth = getDepth(query_ullon, query_lrlon, query_w);
-        // snap query coordinates to leftmost x or uppermost y (helper method)
+
+        // snap query coordinates to leftmost x or lowermost y
+        int xLeft = getXGridCoord(query_ullon, depth);
+        int xRight = getXGridCoord(query_lrlon, depth);
+        int yUp = getYGridCoord(query_ullat, depth);
+        int yDown = getYGridCoord(query_lrlat, depth);
+
+        System.out.println("x" + xLeft + ", " + "x" + xRight + ", " +
+                "y" + yDown + ", " + "y" + yUp);
+        System.out.println("Depth: " + depth);
+
         // iterate by row, inserting x and y into image string name as you go
         // results in 2d list of img names
 
@@ -113,6 +125,33 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         results.put("query_success", true);
         return results;
     }
+
+    private int getGridCoordRange(int depth) {
+        int range = (int) (Math.pow(2, depth) - 1);
+        return range;
+    }
+
+    private int getXGridCoord(double coord, int depth) {
+        return getGridCoord(coord, 'x', depth);
+    }
+
+    private int getYGridCoord(double coord, int depth) {
+        return getGridCoord(coord, 'y', depth);
+    }
+
+    private int getGridCoord(double coord, char axis, int depth) {
+        if (axis == 'x') {
+            double tileSize = (ROOT_LRLON - ROOT_ULLON) / Math.pow(2, depth);
+            int gridX = (int) ((coord - ROOT_ULLON) / tileSize);
+            return gridX;
+        }
+        else {
+            double tileSize = (ROOT_ULLAT - ROOT_LRLAT) / Math.pow(2, depth);
+            int gridY = (int) ((ROOT_ULLAT - coord) / tileSize);
+            return gridY;
+        }
+    }
+
 
     private int getDepth(double ullon, double lrlon, double w) {
         double queryLonDPP = (lrlon - ullon) / w;
