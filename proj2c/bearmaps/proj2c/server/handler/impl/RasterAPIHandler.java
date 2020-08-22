@@ -103,12 +103,19 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         // snap query coordinates to leftmost x or lowermost y
         int xLeft = getXGridCoord(query_ullon, depth);
         int xRight = getXGridCoord(query_lrlon, depth);
-        int yUp = getYGridCoord(query_ullat, depth);
-        int yDown = getYGridCoord(query_lrlat, depth);
+        int yUpper = getYGridCoord(query_ullat, depth);
+        int yLower = getYGridCoord(query_lrlat, depth);
 
-        System.out.println("x" + xLeft + ", " + "x" + xRight + ", " +
-                "y" + yDown + ", " + "y" + yUp);
-        System.out.println("Depth: " + depth);
+        render_grid = renderGrid(xLeft, xRight, yUpper, yLower, depth);
+
+        query_success = querySuccess(render_grid);
+
+        for (int i = 0; i < render_grid[1].length; i += 1) {
+            for (int j = 0; j < render_grid[0].length; j += 1) {
+                System.out.print(render_grid[i][j] + " ");
+            }
+            System.out.println();
+        }
 
         // iterate by row, inserting x and y into image string name as you go
         // results in 2d list of img names
@@ -126,9 +133,38 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         return results;
     }
 
-    private int getGridCoordRange(int depth) {
-        int range = (int) (Math.pow(2, depth) - 1);
-        return range;
+    private boolean querySuccess(String[][] grid) {
+        if (grid == null) {
+            return false;
+        }
+        return true;
+    }
+
+    private String[][] renderGrid(int xLeft, int xRight, int yUpper, int yLower, int depth) {
+        // For partial coverage
+        int gridMax = (int) Math.pow(2, depth) - 1;
+        xLeft = Math.max(0, xLeft);
+        xRight = Math.min(gridMax, xRight);
+        yUpper = Math.max(0, yUpper);
+        yLower = Math.min(gridMax, yLower);
+        int gridXRange;
+        int gridYRange;
+
+        // If query is completely out of bounds
+        if (xRight <= xLeft || yLower <= yUpper) {
+            return null;
+        }
+
+        gridXRange = xRight - xLeft + 1;
+        gridYRange = yLower - yUpper + 1;
+        String[][] grid = new String[gridYRange][gridXRange];
+
+        for (int i = 0; i < gridYRange; i += 1) {
+            for (int j = 0; j < gridXRange; j += 1) {
+                grid[i][j] = "d" + depth + "_x" + (xLeft + j) + "_y" + (yUpper + i) + ".png";
+            }
+        }
+        return grid;
     }
 
     private int getXGridCoord(double coord, int depth) {
@@ -151,7 +187,6 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
             return gridY;
         }
     }
-
 
     private int getDepth(double ullon, double lrlon, double w) {
         double queryLonDPP = (lrlon - ullon) / w;
