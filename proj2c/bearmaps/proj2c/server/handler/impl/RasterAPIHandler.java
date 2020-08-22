@@ -101,36 +101,43 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         depth = getDepth(query_ullon, query_lrlon, query_w);
 
         // snap query coordinates to leftmost x or lowermost y
-        int xLeft = getXGridCoord(query_ullon, depth);
-        int xRight = getXGridCoord(query_lrlon, depth);
-        int yUpper = getYGridCoord(query_ullat, depth);
-        int yLower = getYGridCoord(query_lrlat, depth);
+        int xLeft = getGridCoord(query_ullon, 'x', depth);
+        int xRight = getGridCoord(query_lrlon, 'x', depth);
+        int yUpper = getGridCoord(query_ullat, 'y', depth);
+        int yLower = getGridCoord(query_lrlat, 'y', depth);
 
         render_grid = renderGrid(xLeft, xRight, yUpper, yLower, depth);
-
         query_success = querySuccess(render_grid);
+        raster_ul_lon = getRaster(xLeft, "ullon", depth);
+        raster_lr_lon = getRaster(xRight, "lrlon", depth);
+        raster_lr_lat = getRaster(yLower, "lrlat", depth);
+        raster_ul_lat = getRaster(yUpper, "ullat", depth);
 
-        for (int i = 0; i < render_grid[1].length; i += 1) {
-            for (int j = 0; j < render_grid[0].length; j += 1) {
-                System.out.print(render_grid[i][j] + " ");
-            }
-            System.out.println();
-        }
-
-        // iterate by row, inserting x and y into image string name as you go
-        // results in 2d list of img names
-
-        results.put("raster_ul_lon", -122.24212646484375);
-        results.put("depth", 7);
-        results.put("raster_lr_lon", -122.24006652832031);
-        results.put("raster_lr_lat", 37.87538940251607);
-        String[][] grid = {{"d7_x84_y28.png", "d7_x85_y28.png", "d7_x86_y28.png"},
-                {"d7_x84_y29.png", "d7_x85_y29.png", "d7_x86_y29.png"},
-                {"d7_x84_y30.png", "d7_x85_y30.png", "d7_x86_y30.png"}};
-        results.put("render_grid", grid);
-        results.put("raster_ul_lat", 37.87701580361881);
-        results.put("query_success", true);
+        results.put("raster_ul_lon", raster_ul_lon);
+        results.put("depth", depth);
+        results.put("raster_lr_lon", raster_lr_lon);
+        results.put("raster_lr_lat", raster_lr_lat);
+        results.put("render_grid", render_grid);
+        results.put("raster_ul_lat", raster_ul_lat);
+        results.put("query_success", query_success);
         return results;
+    }
+
+    private double getRaster(int gridCoord, String rasterCoord, int depth) {
+        double tileSizeLon = (ROOT_LRLON - ROOT_ULLON) / Math.pow(2, depth);
+        double tileSizeLat = (ROOT_ULLAT - ROOT_LRLAT) / Math.pow(2, depth);
+        if (rasterCoord.equals("ullon")) {
+            return ROOT_ULLON + tileSizeLon * gridCoord;
+        }
+        else if (rasterCoord.equals("lrlon")) {
+            return ROOT_ULLON + tileSizeLon * gridCoord + tileSizeLon;
+        }
+        else if (rasterCoord.equals("lrlat")) {
+            return ROOT_ULLAT - tileSizeLat * gridCoord - tileSizeLat;
+        }
+        else {
+            return ROOT_ULLAT - tileSizeLat * gridCoord;
+        }
     }
 
     private boolean querySuccess(String[][] grid) {
@@ -151,7 +158,7 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
         int gridYRange;
 
         // If query is completely out of bounds
-        if (xRight <= xLeft || yLower <= yUpper) {
+        if (xRight < xLeft || yLower < yUpper) {
             return null;
         }
 
@@ -165,14 +172,6 @@ public class RasterAPIHandler extends APIRouteHandler<Map<String, Double>, Map<S
             }
         }
         return grid;
-    }
-
-    private int getXGridCoord(double coord, int depth) {
-        return getGridCoord(coord, 'x', depth);
-    }
-
-    private int getYGridCoord(double coord, int depth) {
-        return getGridCoord(coord, 'y', depth);
     }
 
     private int getGridCoord(double coord, char axis, int depth) {
