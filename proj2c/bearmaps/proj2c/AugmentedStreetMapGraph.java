@@ -24,8 +24,10 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
         pointNodeHashMap = new HashMap<>();
 
         for (Node node : nodes) {
-            Point point = new Point(node.lon(), node.lat());
-            pointNodeHashMap.putIfAbsent(point, node);
+            if (!this.neighbors(node.id()).isEmpty()) {
+                Point point = new Point(node.lon(), node.lat());
+                pointNodeHashMap.putIfAbsent(point, node);
+            }
         }
         Set<Point> pointSet = pointNodeHashMap.keySet();
         List<Point> points = new ArrayList<>(pointSet);
@@ -43,10 +45,7 @@ public class AugmentedStreetMapGraph extends StreetMapGraph {
     public long closest(double lon, double lat) {
         Point point = pointKDTree.nearest(lon, lat);
         Node node = pointNodeHashMap.get(point);
-        if (!this.neighbors(node.id()).isEmpty()) {
-            return node.id();
-        }
-        return closest(node.lon(), node.lat());
+        return node.id();
     }
 
 
