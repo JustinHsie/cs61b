@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class KDTree {
+public class KDTree implements PointSet {
     private HashSet<Point> points;
     private Node root;
     int depth;
@@ -52,6 +52,7 @@ public class KDTree {
         }
     }
 
+    @Override
     public Point nearest(double x, double y) {
         Point goal = new Point(x, y);
         Node best = nearest(root, goal, root);
