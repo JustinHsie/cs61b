@@ -173,18 +173,17 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         }
         int index, origPriority;
         index = origPriority = itemSet.get(item).intValue();
-        while (minHeap[index].priority == origPriority) {
-            if (minHeap[index].item.equals(item)) {
-                minHeap[index].setPriority(priority);
+        for (int i = 1; i < minHeap.length; i++) {
+            if (minHeap[i].item.equals(item)) {
+                minHeap[i].setPriority(priority);
                 if (priority < origPriority) {
-                    swim(index);
+                    swim(i);
                 }
                 else {
-                    sink(index);
+                    sink(i);
                 }
                 break;
             }
-            index++;
         }
         itemSet.replace(item, priority);
     }
