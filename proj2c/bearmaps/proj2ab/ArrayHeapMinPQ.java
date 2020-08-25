@@ -171,8 +171,8 @@ public class ArrayHeapMinPQ<T> implements ExtrinsicMinPQ<T> {
         if (!contains(item)) {
             throw new NoSuchElementException("Item doesn't exist");
         }
-        int index, origPriority;
-        index = origPriority = itemSet.get(item).intValue();
+        int origPriority = itemSet.get(item).intValue();
+
         for (int i = 1; i < minHeap.length; i++) {
             if (minHeap[i].item.equals(item)) {
                 minHeap[i].setPriority(priority);
