@@ -15,9 +15,9 @@ public class Draw {
         int endX = room.getTopRightCorner().getX();
         int endY = room.getTopRightCorner().getY();
 
-        for (int x = startX; x < endX; x += 1) {
-            for (int y = startY; y < endY; y += 1) {
-                if (x == startX || x == endX - 1 || y == startY || y == endY - 1) {
+        for (int x = startX; x <= endX; x += 1) {
+            for (int y = startY; y <= endY; y += 1) {
+                if (x == startX || x == endX || y == startY || y == endY) {
                     tiles[x][y] = Tileset.WALL;
                 }
                 else {
