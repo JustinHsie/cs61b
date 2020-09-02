@@ -8,7 +8,6 @@ public class Room {
     private int height;
     private Position bottomLeftCorner;
     private Position topRightCorner;
-    private List<Position> wallTiles;
 
     public Room(int width, int height, Position bottomLeftPosition) {
         this.width = width;

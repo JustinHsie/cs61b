@@ -3,6 +3,8 @@ package byow.WorldGenerator;
 import byow.Core.Engine;
 import byow.TileEngine.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class RandomWorld {
@@ -17,13 +19,20 @@ public class RandomWorld {
      * @param tiles
      */
     public static void generateWorld(TETile[][] tiles) {
-        initializeTiles(tiles);
-        //Room room = generateRoom(tiles);
+        Draw.initializeTiles(tiles, WIDTH, HEIGHT);
+        List<Room> rooms = new ArrayList<>();
+
         Room room = new Room(5, 6, new Position(50, 20));
         Draw.drawRoom(room, tiles);
-        Room room2 = generateNeighbor(tiles, room.getBottomLeftCorner(), room.getTopRightCorner());
-        Room room3 = generateNeighbor(tiles, room2.getBottomLeftCorner(), room2.getTopRightCorner());
-        Room room4 = generateNeighbor(tiles, room3.getBottomLeftCorner(), room3.getTopRightCorner());
+        Room room2 = generateRoom(tiles, room.getBottomLeftCorner(), room.getTopRightCorner(), rooms);
+        System.out.println(
+                "(" + room2.getBottomLeftCorner().getX() + ", " + room2.getBottomLeftCorner().getY());
+        Room room3 = generateRoom(tiles, room2.getBottomLeftCorner(), room2.getTopRightCorner(), rooms);
+        System.out.println(
+                "(" + room3.getBottomLeftCorner().getX() + ", " + room3.getBottomLeftCorner().getY());
+        Room room4 = generateRoom(tiles, room3.getBottomLeftCorner(), room3.getTopRightCorner(), rooms);
+        System.out.println(
+                "(" + room4.getBottomLeftCorner().getX() + ", " + room4.getBottomLeftCorner().getY());
 
 
     }
@@ -35,7 +44,8 @@ public class RandomWorld {
      * @param topRight
      * @return
      */
-    private static Room generateNeighbor(TETile[][] tiles, Position bottomLeft, Position topRight) {
+    private static Room generateRoom(TETile[][] tiles, Position bottomLeft,
+                                     Position topRight, List<Room> rooms) {
         Room room;
         Position bottomLeftPosition;
         int width;
@@ -43,13 +53,14 @@ public class RandomWorld {
 
         do {
             // Min width and height of 3 tiles
-            width = RANDOM.nextInt(WIDTH - 3) + 3;
-            height = RANDOM.nextInt(HEIGHT - 3) + 3;
+            width = RANDOM.nextInt(10 - 3) + 3;
+            height = RANDOM.nextInt(10 - 3) + 3;
             bottomLeftPosition = randomSide(bottomLeft, topRight, width, height);
+            room = new Room(width, height, bottomLeftPosition);
         }
-        while (outOfBounds(bottomLeftPosition, width, height));
+        while (outOfBounds(room, width, height) || Overlap.overlaps(room, rooms));
 
-        room = new Room(width, height, bottomLeftPosition);
+        rooms.add(room);
         Draw.drawRoom(room, tiles);
         return room;
     }
@@ -92,76 +103,28 @@ public class RandomWorld {
     }
 
     /**
-     * Generates random room of random size and location, returns room
-     * @param tiles
-     * @return room
-     */
-    private static Room generateRoom(TETile[][] tiles) {
-        Room room;
-        Position bottomLeftPosition;
-        int width;
-        int height;
-
-        do {
-            bottomLeftPosition = randomPosition();
-            // Min width and height of 3 tiles
-            width = RANDOM.nextInt(WIDTH - 3) + 3;
-            height = RANDOM.nextInt(HEIGHT - 3) + 3;
-        }
-        while (outOfBounds(bottomLeftPosition, width, height));
-
-        room = new Room(width, height, bottomLeftPosition);
-        Draw.drawRoom(room, tiles);
-        return room;
-    }
-
-    /**
      * Checks if room is out of bounds of grid
-     * @param bottomLeft
+     * @param room
      * @param width
      * @param height
      * @return
      */
-    private static boolean outOfBounds(Position bottomLeft, int width, int height) {
-        int roomTop = bottomLeft.getY() + height;
-        int roomRight = bottomLeft.getX() + width;
+    private static boolean outOfBounds(Room room, int width, int height) {
+        int roomTop = room.getTopRightCorner().getY();
+        int roomRight = room.getTopRightCorner().getX();
+        int roomLeft = room.getBottomLeftCorner().getX();
+        int roomBot = room.getBottomLeftCorner().getY();
 
         if (roomTop >= HEIGHT || roomRight >= WIDTH) {
             return true;
         }
-        if (bottomLeft.getX() < 0 || bottomLeft.getY() < 0) {
+        if (roomLeft < 0 || roomBot < 0) {
             return true;
         }
         else {
             return false;
         }
     }
-
-    /**
-     * Returns random position
-     * @return position
-     */
-    private static Position randomPosition() {
-        int x = RANDOM.nextInt(WIDTH);
-        int y = RANDOM.nextInt(HEIGHT);
-        Position position = new Position(x, y);
-
-        return position;
-    }
-
-
-    /**
-     * Fills grid with Tileset.Nothing
-     * @param tiles
-     */
-    private static void initializeTiles(TETile[][] tiles) {
-        for (int i = 0; i < WIDTH; i += 1) {
-            for (int j = 0; j < HEIGHT; j += 1) {
-                tiles[i][j] = Tileset.NOTHING;
-            }
-        }
-    }
-
 
     public static void main(String[] args) {
         TERenderer ter = new TERenderer();
