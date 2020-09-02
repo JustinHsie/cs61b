@@ -26,4 +26,16 @@ public class Draw {
             }
         }
     }
+
+    /**
+     * Fills grid with Tileset.Nothing
+     * @param tiles
+     */
+    public static void initializeTiles(TETile[][] tiles, int width, int height) {
+        for (int i = 0; i < width; i += 1) {
+            for (int j = 0; j < height; j += 1) {
+                tiles[i][j] = Tileset.NOTHING;
+            }
+        }
+    }
 }
