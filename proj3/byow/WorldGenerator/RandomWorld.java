@@ -11,22 +11,23 @@ public class RandomWorld {
     private static final int WIDTH = Engine.WIDTH;
     private static final int HEIGHT = Engine.HEIGHT;
 
-    public static final long SEED = 123;
-    public static final Random RANDOM = new Random(SEED);
+    static long SEED;
+    static final Random RANDOM = new Random(SEED);
 
     /**
      * Generates world given tiles
      * @param tiles
      */
-    public static void generateWorld(TETile[][] tiles) {
+    public static void generateWorld(TETile[][] tiles, long seed) {
+        SEED = seed;
         Draw.initializeTiles(tiles);
         List<Room> rooms = new ArrayList<>();
         Room room;
 
         // Sets up first room
         do {
-        int width = RANDOM.nextInt(10 - 3) + 3;
-        int height = RANDOM.nextInt(10 - 3) + 3;
+        int width = RANDOM.nextInt(11 - 3) + 3;
+        int height = RANDOM.nextInt(11 - 3) + 3;
         int x = RANDOM.nextInt(WIDTH);
         int y = RANDOM.nextInt(HEIGHT);
 
@@ -71,8 +72,8 @@ public class RandomWorld {
 
         do {
             // Min width and height of 3 tiles
-            newWidth = RANDOM.nextInt(10 - 3) + 3;
-            newHeight = RANDOM.nextInt(10 - 3) + 3;
+            newWidth = RANDOM.nextInt(11 - 3) + 3;
+            newHeight = RANDOM.nextInt(11 - 3) + 3;
             roomOpening = randomNeighbor(room, newWidth, newHeight);
             newRoom = roomOpening.room;
             opening = roomOpening.opening;
@@ -152,15 +153,5 @@ public class RandomWorld {
                 opening = Opening.toRight(newRoom, room);
                 return new RoomOpening(newRoom, opening);
         }
-    }
-
-    public static void main(String[] args) {
-        TERenderer ter = new TERenderer();
-        ter.initialize(WIDTH, HEIGHT);
-
-        TETile[][] world = new TETile[WIDTH][HEIGHT];
-        generateWorld(world);
-
-        ter.renderFrame(world);
     }
 }
