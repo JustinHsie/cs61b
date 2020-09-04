@@ -11,118 +11,133 @@ public class RandomWorld {
     private static final int WIDTH = Engine.WIDTH;
     private static final int HEIGHT = Engine.HEIGHT;
 
-    private static final long SEED = 123;
-    private static final Random RANDOM = new Random(SEED);
+    public static final long SEED = 123;
+    public static final Random RANDOM = new Random(SEED);
 
     /**
      * Generates world given tiles
      * @param tiles
      */
     public static void generateWorld(TETile[][] tiles) {
-        Draw.initializeTiles(tiles, WIDTH, HEIGHT);
+        Draw.initializeTiles(tiles);
         List<Room> rooms = new ArrayList<>();
 
         Room room = new Room(5, 6, new Position(50, 20));
+        rooms.add(room);
         Draw.drawRoom(room, tiles);
-        Room room2 = generateRoom(tiles, room.getBottomLeftCorner(), room.getTopRightCorner(), rooms);
         System.out.println(
-                "(" + room2.getBottomLeftCorner().getX() + ", " + room2.getBottomLeftCorner().getY());
-        Room room3 = generateRoom(tiles, room2.getBottomLeftCorner(), room2.getTopRightCorner(), rooms);
-        System.out.println(
-                "(" + room3.getBottomLeftCorner().getX() + ", " + room3.getBottomLeftCorner().getY());
-        Room room4 = generateRoom(tiles, room3.getBottomLeftCorner(), room3.getTopRightCorner(), rooms);
-        System.out.println(
-                "(" + room4.getBottomLeftCorner().getX() + ", " + room4.getBottomLeftCorner().getY());
+                "(" + room.getBottomLeftCorner().getX() + ", " + room.getBottomLeftCorner().getY());
+        Room room2 = generateRoom(tiles, room, rooms);
+        generateRoom(tiles, room, rooms);
+        generateRoom(tiles, room, rooms);
+        generateRoom(tiles, room, rooms);
+
+        generateRoom(tiles, room2, rooms);
+        Room hm = generateRoom(tiles, room2, rooms);
+        Room room3 = generateRoom(tiles, room2, rooms);
+
+        Room room4 = generateRoom(tiles, room3, rooms);
+        generateRoom(tiles, room3, rooms);
+
+        generateRoom(tiles, hm, rooms);
+        generateRoom(tiles, hm, rooms);
+        generateRoom(tiles, hm, rooms);
 
 
     }
 
     /**
-     * Takes a room's corners and generates neighbor next to it
+     * Takes a room and generates neighbor next to it
      * @param tiles
-     * @param bottomLeft
-     * @param topRight
+     * @param room
      * @return
      */
-    private static Room generateRoom(TETile[][] tiles, Position bottomLeft,
-                                     Position topRight, List<Room> rooms) {
-        Room room;
-        Position bottomLeftPosition;
-        int width;
-        int height;
+    private static Room generateRoom(TETile[][] tiles, Room room, List<Room> rooms) {
+        Room newRoom;
+        Opening opening;
+        RoomOpening roomOpening;
+        int newWidth;
+        int newHeight;
 
         do {
             // Min width and height of 3 tiles
-            width = RANDOM.nextInt(10 - 3) + 3;
-            height = RANDOM.nextInt(10 - 3) + 3;
-            bottomLeftPosition = randomSide(bottomLeft, topRight, width, height);
-            room = new Room(width, height, bottomLeftPosition);
+            newWidth = RANDOM.nextInt(10 - 3) + 3;
+            newHeight = RANDOM.nextInt(10 - 3) + 3;
+            roomOpening = randomNeighbor(room, newWidth, newHeight);
+            newRoom = roomOpening.room;
+            opening = roomOpening.opening;
         }
-        while (outOfBounds(room, width, height) || Overlap.overlaps(room, rooms));
+        while (Catch.outOfBounds(newRoom) || Catch.overlaps(newRoom, rooms));
 
-        rooms.add(room);
-        Draw.drawRoom(room, tiles);
-        return room;
-    }
+        rooms.add(newRoom);
+        Draw.drawRoom(newRoom, tiles);
+        Draw.drawOpening(opening, tiles);
+        System.out.println(
+                "(" + newRoom.getBottomLeftCorner().getX() + ", " +
+                        newRoom.getBottomLeftCorner().getY() + ")");
 
-    private static Position randomSide(Position bottomLeft, Position topRight, int width, int height) {
-        int x;
-        int y;
-        int direction = RANDOM.nextInt(4);
-
-        switch (direction) {
-            // To left
-            case 0:
-                x = bottomLeft.getX() - width;
-                y = RANDOM.nextInt(topRight.getY() - bottomLeft.getY()) + bottomLeft.getY();
-                return new Position(x, y);
-
-            // To right
-            case 1:
-                x = topRight.getX() + 1;
-                y = RANDOM.nextInt(topRight.getY() - bottomLeft.getY()) + bottomLeft.getY();
-                return new Position(x, y);
-
-            // To top
-            case 2:
-                x = RANDOM.nextInt(topRight.getX() - bottomLeft.getX()) + bottomLeft.getX();
-                y = topRight.getY() + 1;
-                return new Position(x, y);
-
-            // To bottom
-            case 3:
-                x = RANDOM.nextInt(topRight.getX() - bottomLeft.getX()) + bottomLeft.getX();
-                y = bottomLeft.getY() - height;
-                return new Position(x, y);
-
-            default:
-                x = topRight.getX() + 1;
-                y = RANDOM.nextInt(topRight.getY() - bottomLeft.getY()) + bottomLeft.getY();
-                return new Position(x, y);
-        }
+        return newRoom;
     }
 
     /**
-     * Checks if room is out of bounds of grid
+     * Returns a new neighboring room on random side of the given room,
+     * given new room's width and height
      * @param room
      * @param width
      * @param height
      * @return
      */
-    private static boolean outOfBounds(Room room, int width, int height) {
-        int roomTop = room.getTopRightCorner().getY();
-        int roomRight = room.getTopRightCorner().getX();
-        int roomLeft = room.getBottomLeftCorner().getX();
-        int roomBot = room.getBottomLeftCorner().getY();
+    private static RoomOpening randomNeighbor(Room room, int width, int height) {
+        int x;
+        int y;
+        Position bottomLeft = room.getBottomLeftCorner();
+        Position topRight = room.getTopRightCorner();
+        Room newRoom;
+        Opening opening;
+        int direction = RANDOM.nextInt(4);
 
-        if (roomTop >= HEIGHT || roomRight >= WIDTH) {
-            return true;
-        }
-        if (roomLeft < 0 || roomBot < 0) {
-            return true;
-        }
-        else {
-            return false;
+        switch (direction) {
+            /**
+             * -1s limit the range so floors across rooms can be accessible
+             */
+            // To left
+            case 0:
+                x = bottomLeft.getX() - width;
+                y = RANDOM.nextInt(topRight.getY() - bottomLeft.getY() - 1) + bottomLeft.getY();
+                newRoom =  new Room(width, height, new Position(x, y));
+                opening = Opening.toRight(newRoom, room);
+                return new RoomOpening(newRoom, opening);
+
+            // To right
+            case 1:
+                x = topRight.getX() + 1;
+                y = RANDOM.nextInt(topRight.getY() - bottomLeft.getY() - 1) + bottomLeft.getY();
+                newRoom = new Room(width, height, new Position(x, y));
+                opening = Opening.toLeft(newRoom, room);
+                return new RoomOpening(newRoom, opening);
+
+            // To top
+            case 2:
+                x = RANDOM.nextInt(topRight.getX() - bottomLeft.getX() - 1) + bottomLeft.getX();
+                y = topRight.getY() + 1;
+                newRoom = new Room(width, height, new Position(x, y));
+                opening = Opening.toBottom(newRoom, room);
+                return new RoomOpening(newRoom, opening);
+
+            // To bottom
+            case 3:
+                x = RANDOM.nextInt(topRight.getX() - bottomLeft.getX() - 1) + bottomLeft.getX();
+                y = bottomLeft.getY() - height;
+                newRoom = new Room(width, height, new Position(x, y));
+                opening = Opening.toTop(newRoom, room);
+                return new RoomOpening(newRoom, opening);
+
+            default:
+                x = bottomLeft.getX() - width;
+                y = RANDOM.nextInt(topRight.getY() - bottomLeft.getY() - 1) + bottomLeft.getY();
+                newRoom =  new Room(width, height, new Position(x, y));
+                opening = Opening.toRight(newRoom, room);
+                return new RoomOpening(newRoom, opening);
         }
     }
 

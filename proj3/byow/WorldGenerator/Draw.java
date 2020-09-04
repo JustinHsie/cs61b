@@ -1,9 +1,27 @@
 package byow.WorldGenerator;
 
+import byow.Core.Engine;
 import byow.TileEngine.TETile;
 import byow.TileEngine.Tileset;
 
 public class Draw {
+    private static final int WIDTH = Engine.WIDTH;
+    private static final int HEIGHT = Engine.HEIGHT;
+
+    public static void drawOpening(Opening opening, TETile[][] tiles) {
+        Position current = opening.getOpening();
+        Position neighbor = opening.getNeighborOpening();
+
+        drawOpening(current, tiles);
+        drawOpening(neighbor, tiles);
+    }
+
+    private static void drawOpening(Position opening, TETile[][] tiles) {
+        int x = opening.getX();
+        int y = opening.getY();
+        tiles[x][y] = Tileset.FLOOR;
+    }
+
     /**
      * Draws given room onto tiles grid
      * @param room
@@ -31,9 +49,9 @@ public class Draw {
      * Fills grid with Tileset.Nothing
      * @param tiles
      */
-    public static void initializeTiles(TETile[][] tiles, int width, int height) {
-        for (int i = 0; i < width; i += 1) {
-            for (int j = 0; j < height; j += 1) {
+    public static void initializeTiles(TETile[][] tiles) {
+        for (int i = 0; i < WIDTH; i += 1) {
+            for (int j = 0; j < HEIGHT; j += 1) {
                 tiles[i][j] = Tileset.NOTHING;
             }
         }

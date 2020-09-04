@@ -1,8 +1,5 @@
 package byow.WorldGenerator;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Room {
     private int width;
     private int height;
@@ -15,6 +12,22 @@ public class Room {
         this.bottomLeftCorner = bottomLeftPosition;
         this.topRightCorner = new Position(bottomLeftPosition.getX() + width - 1,
                                            bottomLeftPosition.getY() + height - 1);
+    }
+
+    public int getLeftX() {
+        return bottomLeftCorner.getX();
+    }
+
+    public int getRightX() {
+        return topRightCorner.getX();
+    }
+
+    public int getBottomY() {
+        return bottomLeftCorner.getY();
+    }
+
+    public int getTopY() {
+        return topRightCorner.getY();
     }
 
     public int getWidth() {
