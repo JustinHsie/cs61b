@@ -26,6 +26,7 @@ public class Opening {
     }
 
     public static Opening toTop(Room current, Room neighbor) {
+        // Bottom and top Y of opening
         int bottomY = current.getTopY();
         int topY = neighbor.getBottomY();
         int lowerX = current.getLeftX();
@@ -40,6 +41,7 @@ public class Opening {
     }
 
     public static Opening toBottom(Room current, Room neighbor) {
+        // Top and bottom Y of opening
         int topY = current.getBottomY();
         int bottomY = neighbor.getTopY();
         int lowerX = current.getLeftX();
@@ -54,6 +56,7 @@ public class Opening {
     }
 
     public static Opening toLeft(Room current, Room neighbor) {
+        // Left and right X of opening
         int leftX = current.getLeftX();
         int rightX = neighbor.getRightX();
         int lowerY = current.getBottomY();
@@ -68,6 +71,7 @@ public class Opening {
     }
 
     public static Opening toRight(Room current, Room neighbor) {
+        // Left and right X of opening
         int leftX = current.getRightX();
         int rightX = neighbor.getLeftX();
         int lowerY = current.getBottomY();

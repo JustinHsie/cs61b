@@ -17,36 +17,53 @@ public class Catch {
     }
 
     private static boolean overlaps(Room room1, Room room2) {
-        if (between(room1, room2) || between(room2, room1)) {
+        // OR statement in case room1's corners don't overlap with room2's
+        // ie room2's corners are both within room1's
+        if (cornersOverlap(room1, room2) || cornersOverlap(room2, room1)) {
+            return true;
+        }
+        if (bodiesOverlap(room1, room2) || bodiesOverlap(room2, room1)) {
             return true;
         }
         return false;
     }
 
-    private static boolean between(Room room1, Room room2) {
+    // If corners don't overlap but bodies do
+    private static boolean bodiesOverlap(Room room1, Room room2) {
+        if (room2.getLeftX() <= room1.getLeftX() && room1.getRightX() <= room2.getRightX() &&
+        room1.getBottomY() <= room2.getBottomY() && room2.getTopY() <= room1.getTopY()) {
+            return true;
+        }
+        return false;
+    }
+
+    // If room1's corners are within room2 boundaries
+    private static boolean cornersOverlap(Room room1, Room room2) {
         if (betweenX(room1, room2) && betweenY(room1, room2)) {
             return true;
         }
         return false;
     }
 
+    // If room1's left or right X is between room2's Xs
     private static boolean betweenX(Room room1, Room room2) {
-        if (room2.getBottomLeftCorner().getX() <= room1.getTopRightCorner().getX() &&
-                room1.getTopRightCorner().getX() <= room2.getTopRightCorner().getX()) {
+        if (room2.getLeftX() <= room1.getRightX() &&
+                room1.getRightX() <= room2.getRightX()) {
             return true;
-        } else if (room2.getBottomLeftCorner().getX() <= room1.getBottomLeftCorner().getX() &&
-                room1.getBottomLeftCorner().getX() <= room2.getTopRightCorner().getX()) {
+        } else if (room2.getLeftX() <= room1.getLeftX() &&
+                room1.getLeftX() <= room2.getRightX()) {
             return true;
         }
         return false;
     }
 
+    // If room1's top or bottom Y is between room2's Ys
     private static boolean betweenY(Room room1, Room room2) {
-        if (room2.getBottomLeftCorner().getY() <= room1.getTopRightCorner().getY() &&
-                room1.getTopRightCorner().getY() <= room2.getTopRightCorner().getY()) {
+        if (room2.getBottomY() <= room1.getTopY() &&
+                room1.getTopY() <= room2.getTopY()) {
             return true;
-        } else if (room2.getBottomLeftCorner().getY() <= room1.getBottomLeftCorner().getY() &&
-                room1.getBottomLeftCorner().getY() <= room2.getTopRightCorner().getY()) {
+        } else if (room2.getBottomY() <= room1.getBottomY() &&
+                room1.getBottomY() <= room2.getTopY()) {
             return true;
         }
         return false;
