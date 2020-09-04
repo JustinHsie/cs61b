@@ -21,29 +21,38 @@ public class RandomWorld {
     public static void generateWorld(TETile[][] tiles) {
         Draw.initializeTiles(tiles);
         List<Room> rooms = new ArrayList<>();
+        Room room;
 
-        Room room = new Room(5, 6, new Position(50, 20));
+        // Sets up first room
+        do {
+        int width = RANDOM.nextInt(10 - 3) + 3;
+        int height = RANDOM.nextInt(10 - 3) + 3;
+        int x = RANDOM.nextInt(WIDTH);
+        int y = RANDOM.nextInt(HEIGHT);
+
+        Position startPos = new Position(x, y);
+        room = new Room(width, height, startPos);
+
+        }
+        while (Catch.outOfBounds(room) || Catch.overlaps(room, rooms));
+
         rooms.add(room);
         Draw.drawRoom(room, tiles);
-        System.out.println(
-                "(" + room.getBottomLeftCorner().getX() + ", " + room.getBottomLeftCorner().getY());
-        Room room2 = generateRoom(tiles, room, rooms);
-        generateRoom(tiles, room, rooms);
-        generateRoom(tiles, room, rooms);
-        generateRoom(tiles, room, rooms);
 
-        generateRoom(tiles, room2, rooms);
-        Room hm = generateRoom(tiles, room2, rooms);
-        Room room3 = generateRoom(tiles, room2, rooms);
+        // Generates rooms
+        roomRecursion(tiles, room, rooms);
 
-        Room room4 = generateRoom(tiles, room3, rooms);
-        generateRoom(tiles, room3, rooms);
+    }
 
-        generateRoom(tiles, hm, rooms);
-        generateRoom(tiles, hm, rooms);
-        generateRoom(tiles, hm, rooms);
-
-
+    private static void roomRecursion(TETile[][] tiles, Room room, List<Room> rooms) {
+        if (room == null) {
+            return;
+        }
+        int numNeighbors = RANDOM.nextInt(3) + 1;
+        for (int i = 0; i < numNeighbors; i += 1) {
+            Room newRoom = generateRoom(tiles, room, rooms);
+            roomRecursion(tiles, newRoom, rooms);
+        }
     }
 
     /**
@@ -58,6 +67,7 @@ public class RandomWorld {
         RoomOpening roomOpening;
         int newWidth;
         int newHeight;
+        int tries = 0;
 
         do {
             // Min width and height of 3 tiles
@@ -66,15 +76,18 @@ public class RandomWorld {
             roomOpening = randomNeighbor(room, newWidth, newHeight);
             newRoom = roomOpening.room;
             opening = roomOpening.opening;
+
+            // Limit number of tries
+            tries += 1;
+            if (tries > 30) {
+                return null;
+            }
         }
         while (Catch.outOfBounds(newRoom) || Catch.overlaps(newRoom, rooms));
 
         rooms.add(newRoom);
         Draw.drawRoom(newRoom, tiles);
         Draw.drawOpening(opening, tiles);
-        System.out.println(
-                "(" + newRoom.getBottomLeftCorner().getX() + ", " +
-                        newRoom.getBottomLeftCorner().getY() + ")");
 
         return newRoom;
     }
