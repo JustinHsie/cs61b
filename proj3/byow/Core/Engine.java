@@ -5,6 +5,7 @@ import byow.InputDemo.KeyboardInputSource;
 import byow.InputDemo.StringInputDevice;
 import byow.TileEngine.TERenderer;
 import byow.TileEngine.TETile;
+import byow.TileEngine.Tileset;
 import byow.WorldGenerator.RandomWorld;
 import edu.princeton.cs.introcs.StdDraw;
 
@@ -64,6 +65,7 @@ public class Engine {
     }
 
     private TETile[][] processInput(InputSource inputSource) {
+        // Get string
         String seedString = "";
         while (inputSource.possibleNextInput()) {
             char c = inputSource.getNextKey();
@@ -79,27 +81,38 @@ public class Engine {
             }
         }
 
+        // Initialize world
         ter.initialize(WIDTH, HEIGHT);
-        TETile[][] finalWorldFrame = new TETile[WIDTH][HEIGHT];
+        TETile[][] world = new TETile[WIDTH][HEIGHT];
         long seed = Long.parseLong(seedString);
-        RandomWorld.generateWorld(finalWorldFrame, seed);
-        ter.renderFrame(finalWorldFrame);
+        RandomWorld.generateWorld(world, seed);
+        ter.renderFrame(world);
 
-        return finalWorldFrame;
+        // Avatar
+        Avatar Aang = new Avatar(world, ter);
+        while (inputSource.possibleNextInput()) {
+            char c = inputSource.getNextKey();
+            Aang.move(c);
+        }
+
+        return world;
     }
 
     private void drawFrame() {
         StdDraw.clear();
+        StdDraw.enableDoubleBuffering();
         StdDraw.clear(Color.black);
         StdDraw.setPenColor(Color.white);
         StdDraw.text(0.5, 0.5, "(N)ew Game");
         StdDraw.text(0.5, 0.45, "(L)oad Game");
         StdDraw.text(0.5, 0.4, "(Q)uit");
+        StdDraw.show();
     }
 
     private void drawSeed(double x, double y, String s) {
         drawFrame();
         StdDraw.text(0.5, 0.3, "Enter Seed, then press (S)tart:");
         StdDraw.text(x, y, s);
+        StdDraw.show();
     }
 }

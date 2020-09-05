@@ -11,8 +11,8 @@ public class RandomWorld {
     private static final int WIDTH = Engine.WIDTH;
     private static final int HEIGHT = Engine.HEIGHT;
 
-    static long SEED;
-    static Random RANDOM;
+    public static long SEED;
+    public static Random RANDOM;
 
     /**
      * Generates world given tiles
@@ -21,7 +21,6 @@ public class RandomWorld {
     public static void generateWorld(TETile[][] tiles, long seed) {
         SEED = seed;
         RANDOM = new Random(seed);
-
         Draw.initializeTiles(tiles);
         List<Room> rooms = new ArrayList<>();
         Room room;
