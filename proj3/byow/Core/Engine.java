@@ -16,6 +16,9 @@ public class Engine {
     /* Feel free to change the width and height. */
     public static final int WIDTH = 80;
     public static final int HEIGHT = 40;
+    TETile[][] world;
+    Avatar Aang;
+    String save = "";
 
     /**
      * Method used for exploring a fresh world. This method should handle all inputs,
@@ -25,8 +28,6 @@ public class Engine {
         InputSource inputSource = new KeyboardInputSource();
         drawFrame();
         processInput(inputSource);
-
-
     }
 
     /**
@@ -54,12 +55,8 @@ public class Engine {
         // passed in as an argument, and return a 2D tile representation of the
         // world that would have been drawn if the same inputs had been given
         // to interactWithKeyboard().
-        //
-        // See proj3.byow.InputDemo for a demo of how you can make a nice clean interface
-        // that works for many different input types.
 
         InputSource inputSource = new StringInputDevice(input);
-
         TETile[][] finalWorldFrame = processInput(inputSource);
         return finalWorldFrame;
     }
@@ -69,10 +66,23 @@ public class Engine {
         String seedString = "";
         while (inputSource.possibleNextInput()) {
             char c = inputSource.getNextKey();
+            if (c == 'L') {
+                String load = Save.loadString();
+                world = interactWithInputString(load);
+                break;
+            }
+            save = save + c;
             if (c == 'N') {
                 drawSeed(0.5, 0.25, "");
             }
             else if (c == 'S') {
+                // Initialize world
+                ter.initialize(WIDTH, HEIGHT);
+                world = new TETile[WIDTH][HEIGHT];
+                long seed = Long.parseLong(seedString);
+                RandomWorld.generateWorld(world, seed);
+                ter.renderFrame(world);
+                Aang = new Avatar(world, ter);
                 break;
             }
             else {
@@ -81,20 +91,17 @@ public class Engine {
             }
         }
 
-        // Initialize world
-        ter.initialize(WIDTH, HEIGHT);
-        TETile[][] world = new TETile[WIDTH][HEIGHT];
-        long seed = Long.parseLong(seedString);
-        RandomWorld.generateWorld(world, seed);
-        ter.renderFrame(world);
-
-        // Avatar
-        Avatar Aang = new Avatar(world, ter);
         while (inputSource.possibleNextInput()) {
             char c = inputSource.getNextKey();
+            if (c == ':') {
+                if (inputSource.getNextKey() == 'Q') {
+                    Save.saveString(save);
+                    System.exit(0);
+                }
+            }
             Aang.move(c);
+            save = save + c;
         }
-
         return world;
     }
 
