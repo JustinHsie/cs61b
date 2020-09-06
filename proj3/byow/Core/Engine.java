@@ -14,10 +14,12 @@ import java.awt.*;
 public class Engine {
     TERenderer ter = new TERenderer();
     /* Feel free to change the width and height. */
-    public static final int WIDTH = 80;
+    public static final int WIDTH = 40;
     public static final int HEIGHT = 40;
     TETile[][] world;
     Avatar Aang;
+    Door door;
+    Key key;
     String save = "";
 
     /**
@@ -83,6 +85,8 @@ public class Engine {
                 RandomWorld.generateWorld(world, seed);
                 ter.renderFrame(world);
                 Aang = new Avatar(world, ter);
+                door = new Door(world, ter);
+                key = new Key(world, ter);
                 break;
             }
             else {
