@@ -17,16 +17,16 @@ import java.awt.Color;
  */
 
 public class Tileset {
-    public static final TETile AVATAR = new TETile('@', Color.white, Color.black, "you");
-    public static final TETile WALL = new TETile('#', new Color(216, 128, 128), Color.darkGray,
+    public static final TETile AVATAR = new TETile('♠', new Color(255, 51, 51), new Color(255, 229, 204), "you");
+    public static final TETile WALL = new TETile('▲', new Color(255, 153, 153), new Color(255, 178, 102),
             "wall");
-    public static final TETile FLOOR = new TETile('·', new Color(128, 192, 128), Color.black,
+    public static final TETile FLOOR = new TETile('❀', new Color(76, 153, 0), new Color(178, 255, 102),
             "floor");
-    public static final TETile NOTHING = new TETile(' ', Color.black, Color.black, "nothing");
-    public static final TETile GRASS = new TETile('"', Color.green, Color.black, "grass");
+    public static final TETile NOTHING = new TETile('≈', new Color(51, 153, 255), new Color(153, 204, 255), "nothing");
+    public static final TETile GRASS = new TETile('♠', Color.green, Color.black, "grass");
     public static final TETile WATER = new TETile('≈', Color.blue, Color.black, "water");
-    public static final TETile FLOWER = new TETile('❀', Color.magenta, Color.pink, "flower");
-    public static final TETile LOCKED_DOOR = new TETile('█', Color.orange, Color.black,
+    public static final TETile FLOWER = new TETile('▢', new Color(64, 64, 64), new Color(255, 255, 51), "flower");
+    public static final TETile LOCKED_DOOR = new TETile('█', new Color(255, 255, 51), new Color(64, 64, 64),
             "locked door");
     public static final TETile UNLOCKED_DOOR = new TETile('▢', Color.orange, Color.black,
             "unlocked door");
